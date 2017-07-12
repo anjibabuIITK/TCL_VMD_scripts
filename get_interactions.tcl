@@ -8,7 +8,7 @@ set n [molinfo top get numframes ]
 #puts $n
 for {set i 0} {$i <= $n } {incr i} {
 #set sel [ atomselect top " not resname WAT and (within 3 of resid 235 ) " frame $i ]
-set sel [ atomselect top " not resname WAT and (within 3 of serial 3417 3439 3416 3395 3412 3396 3429 3419 3397) and not resname MRP" frame $i ]
+set sel [ atomselect top " not resname WAT and (within 3 of serial 3417 3439 3416 3395 3412 3396 3429 3419 3397) and not resid 235" frame $i ]
 set intractions [ $sel get {resid resname} ]
 #puts $outfile "$i $intractions "
 #puts $intractions
