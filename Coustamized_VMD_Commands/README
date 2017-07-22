@@ -160,7 +160,7 @@ AVAILABLE COMMANDS AND DETAILS :
    USAGE         : show_interactions sel1 sel2 cutoff <start frame> <end frame> 
    EXAMPLE       : show_interactions "protein" "resid 143" 3.0 5 10
    (It prints all interactions within cutoff of 3.0 (A) between protein and resid 143 of all atoms )
-   OUTPUT FORMAT: index_A resid_A resname_A (atom type A)- index_B resid_B resname_B (atom type B):  Distance
+    OUTPUT FORMAT:indexA residA resnameA(typeA)---indexB residB resnameB(typeB) :  Distance
    ARGUMENTS     :
       sel1       : Any given  atom selction
       sel2       : Any given atom selction
@@ -185,7 +185,8 @@ AVAILABLE COMMANDS AND DETAILS :
 
 
 15.Command Name   : count_hbonds
-   PURPOSE        : Prints AVG No. of HBonds between given DONOR and ACCEPTOR selections & DIST_cutoff and angle_cutoff
+   PURPOSE        : Prints AVG No. of HBonds b/w given DONOR and ACCEPTOR selections
+                     and given distance_cutoff & angle_cutoff .
    USAGE          : count_hbonds "Donor_sel1"  "Acceptor_sel2"  distance_cutoff angle_cutoff
    EXAMPLE        : count_hbonds "protein and name N" "protein and name O" 3.0 30
    OUTPUT         : Stores data in file "HBONDS_COUNT.dat".
@@ -194,18 +195,19 @@ AVAILABLE COMMANDS AND DETAILS :
 
 
 16.Command Name   : show_hbonds
-   PURPOSE        : Prints the all HBonds between given DONOR and ACCEPTOR selections within given distance & angle cutoff.
-   USAGE          : show_hbonds  "Donor_sel1" "Acceptor_sel2" distance_cutoff angle_cutoff <initial frame>  <end frame> 
+   PURPOSE        : Prints the all HBonds b/w given DONOR & ACCEPTOR selections for
+                    given distance & angle cutoff.
+   USAGE          : show_hbonds  "D_sel1" "A_sel2" dist_cutoff angle_cutoff <startframe> <endframe> 
    EXAMPLE        : show_hbonds "protein and name N" "protein and name O" 3.0 30 5 10
    OUTPUT         : Stores all HBONDS data in HBONDS.dat.
-   OUTPUT FORMAT  : index_D resid_D resname_D (type) -- index_A resid_A resname_A(type) --- Distance
+   OUTPUT FORMAT  : indexD residD resnameD(type)-- indexA residA resnameA(type)-- Distance
    (Prints and Stores data for every Frame ) 
    NOTE           : Always Atomselctons should be DONOR and ACCEPTOR , (not ACCEPTOR and DONOR)
 
 
  17.Command Name  :  HB_occupancy
     PURPOSE       :  Prints only the HBONDS occupancy for given selctions for selected frames
-    USAGE         :  HB_occupancy "DONOR_sel1" "ACCEPTOR_sel2" distance_cutoff angle_cutoff <start_frame> <end_frame>
+    USAGE         :  HB_occupancy "D_sel1" "A_sel2" dist_cutoff angle_cutoff <startframe> <endframe>
     EXAMPLE       :  HB_occupancy "protein" "resid 147" 3.0 30 0 20
     OUTPUT FORMAT :  RESID_D  RESNAME_D --  RESID_A  RESNAME_A    ---OCUPANCY (%)
     EXAMPLE       :  140  LYS -- 147 ARG  --- 80.00 %   (Pints for all selected frames) 
@@ -242,7 +244,30 @@ AVAILABLE COMMANDS AND DETAILS :
                  
                   
          NOTE : Other Movie formats will be updated soon.
+    
+    
+  20.Command Name : save_coordinates
+     PURPOSE      : Saves coordinates for given arguments
+     USAGE        : save_coordinates "Sel" {molid} {filename} {filetype} {start_frame} {end_frame} {stride}
+     EXAMPLE      : save_coordinates "protein" top my_protien.mol2 mol2 5 30 5  
+    
+     ARGUMENTS    :
+     AtomselectioN: Any given slection
+     Start frame  : From which frame to save coordinates
+     End frame    : To which frame to save coordinates
+     Stride       : After how many frames you want save (skipping)"
+     molid        : Which molecule you want save
+     Filename     : Filename with extension
+     EXAMPLE      : protein.mol2, protein.xyz, protein.gro, protein.dcd.....etc.
+     Filetype     : Which format you want to save.
+     
+     Available Filetypes  : ABINIT , bgf, binpos, crd, crdbox, dcd, gro, trr, js, lammpstrj, mol2,
+                            namdbin, pdb, pqr, rst7,POSCAR, xbgf, xyz, dtr, m"ae, dms, hoomd .
          
+         
+         
+         
+        
          
          #================================================================================#
          #                                                                                #
@@ -252,13 +277,13 @@ AVAILABLE COMMANDS AND DETAILS :
          #                                                                                #  
          #================================================================================#
                   
+            
+            
+            
+            
+       $$    " yad bhavam tad bhavati "    means     "you become whatever you think"   $$
                   
-                  
-                  
-                  
-                  
-                  
-                  
+                                                                     ----from vedas
                   
 
 
