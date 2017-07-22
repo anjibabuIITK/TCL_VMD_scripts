@@ -1,4 +1,4 @@
-# TCL VMD Script for analyse trajectory
+# TCL VMD Script for analyse trajectory and Can Be used as Costamized Commands in VMD
 #
 # VERSION  : analysis_script_V 1.0
 #
@@ -6,7 +6,13 @@
 #             IIT KANPUR, INDIA.
 #             ( anjibabu480@gmail.com)
 #
-# SOURCE analysis.tcl in VMD Tk console
+# Step 1    :  SOURCE analysis.tcl in VMD Tk  console
+# Step 2    :  Command_name {Arguments}
+#
+# After Sourcing analysis.tcl script in VMD console, type following
+#    my_commands show     : List out all available commands from this script.
+#    --help command_name  : Shows the details of command ,with examples.
+#
 #
 #  Following analysis can be done by using this script :
 #
@@ -19,12 +25,9 @@
 #  Print  Interactions within given cutoff
 #  Print No. of waters within given cutoff
 #  Print No. of HBonds within given cutoff
-
-
-
 #  Print residue names and resid for given sel 
 #  Molecule details ( No of frames, No of atoms, No of waters, Box size
-#  set pbc_box and off Pbc_box
+#  set pbc_box and off Pbc_box and prints box size
 #  save_pdb
 #  save_image
 #  save_movie   : creates a movie for given frames
@@ -38,7 +41,6 @@
 #  Ramachandran plot
 #  HB plot
 #  PBC Wrapping
-
 #  delete_frame : Deletes the frames for given intial and final frames
 #====================================================
 #
