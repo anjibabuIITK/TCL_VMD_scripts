@@ -14,15 +14,17 @@ TCL VMD SCRIPT TO ANALYSE TRAJECTORY and Can be UTILIZED as CUSTAMIZED COMMANDS 
     my_commands show     : List out all available commands from this script.
     --help command_name  : Shows the details of command ,with examples.
  
-===================================================================================================
-TIP OF THE DAY  : keep this analysis.tcl script in a adirectory called vmd_tcl_scripts/
-         mention its path in vmd startup file .vmdrc
+================================================================================================
+TIP OF THE DAY  :
+
+     Keep this analysis.tcl script in a adirectory called vmd_tcl_scripts/
+     Mention its path in vmd startup file ~/.vmdrc
          
-         eg.   source /home/anjibabu/vmd_tcl_scripts/analysis.tcl
+        eg.   source /home/anjibabu/vmd_tcl_scripts/analysis.tcl
          
-         That's simple, here after when ever you open VMD automatically analysis.tcl will be sorced.
-         So, U can start using these commands as default commands.
-====================================================================================================
+      That's it, here after when ever you open VMD automatically analysis.tcl will be excecuted.
+      So, U can start using these commands as default commands.
+=================================================================================================
              
   Following analysis can be done by using this script :
 
@@ -42,7 +44,7 @@ TIP OF THE DAY  : keep this analysis.tcl script in a adirectory called vmd_tcl_s
   save_image   : Renders image using Tachyon
   save_movie   : creates a movie for given frames (gif file) other formats will be updated soon.
   save_coordinates
-  --help : which gives details of command
+  --help       : which gives details of command
   my_commands show : shows avalilable commands
 
 ====================================================
