@@ -1,47 +1,48 @@
 TCL VMD SCRIPT TO ANALYSE TRAJECTORY and Can be UTILIZED as CUSTAMIZED COMMANDS in VMD
-#
-# VERSION  : analysis_script_V 1.0
-#
-# Authour  :  ANJI BABU KAPAKAYLA
-#             IIT KANPUR, INDIA.
-#             ( anjibabu480@gmail.com)
-#
-# Step 1    :  SOURCE analysis.tcl in VMD Tk  console
-# Step 2    :  Command_name {Arguments}
-#
-# After Sourcing analysis.tcl script in VMD console, type following
-#    my_commands show     : List out all available commands from this script.
-#    --help command_name  : Shows the details of command ,with examples.
-#
-#
-#  Following analysis can be done by using this script :
-#
-#  Alignment                
-#  RMSD
-#  Distance btw two atoms
-#  Measure  Angle
-#  Measure Dihedral
-#  Contact map
-#  Print  Interactions within given cutoff
-#  Print No. of waters within given cutoff
-#  Print No. of HBonds within given cutoff
-#  Print residue names and resid for given sel 
-#  Molecule details ( No of frames, No of atoms, No of waters, Box size
-#  set pbc_box and off Pbc_box and prints box size
-#  save_pdb
-#  save_image
-#  save_movie   : creates a movie for given frames
-#  save_coordinates
-#  --help : which gives details of command
-#  my_commands show : shows avalilable commands
-#
-#====================================================
-#  Future updates:
-#  save_view    : saves the visivilization of current vmd 
-#  Ramachandran plot
-#  HB plot
-#  PBC Wrapping
-#  delete_frame : Deletes the frames for given intial and final frames
+
+ VERSION  : analysis_script_V 1.0
+
+ Authour  :  ANJI BABU KAPAKAYLA
+             IIT KANPUR, INDIA.
+             ( anjibabu480@gmail.com)
+
+ Step 1    :  SOURCE analysis.tcl in VMD Tk  console
+ Step 2    :  Command_name {Arguments}
+
+
+ After Sourcing analysis.tcl script in VMD console, type following
+    my_commands show     : List out all available commands from this script.
+    --help command_name  : Shows the details of command ,with examples.
+
+
+  Following analysis can be done by using this script :
+
+  Alignment                
+  RMSD
+  Distance btw two atoms
+  Measure  Angle
+  Measure Dihedral
+  Contact map
+  Print  Interactions within given cutoff
+  Print No. of waters within given cutoff
+  Print No. of HBonds within given cutoff
+  Print residue names and resid for given sel 
+  Molecule details ( No of frames, No of atoms, No of waters, Box size )
+  On pbc_box and off Pbc_box and prints box size
+  save_pdb
+  save_image   : Renders image using Tachyon
+  save_movie   : creates a movie for given frames (gif file) other formats will be updated soon.
+  save_coordinates
+  --help : which gives details of command
+  my_commands show : shows avalilable commands
+
+====================================================
+  Future updates:
+  save_view    : saves the visivilization of current vmd 
+  Ramachandran plot
+  HB plot
+  PBC Wrapping
+  delete_frame : Deletes the frames for given intial and final frames
 #====================================================
 
 AVAILABLE COMMANDS AND DETAILS :
@@ -96,89 +97,133 @@ AVAILABLE COMMANDS AND DETAILS :
    OUTPUT        : Generates data into a file " DIHEDRAL.dat ".
 
 9. Command Name  : show_residues
-# show_residues : Prints RESID and corresponding RESNAME for given selection and for given frames
-# USAGE    : show_residues sel molid <initial frame>  <final frame>
-# example  : show_residues "resid 170 to 180" 0 0 5
-# example2 : show_residues "(not resname WAT) and within 3 of resid 235" 0 5 10
-# example3 : show_residues "protein and hydrophobic " 0 1 0
-# OUTPUT   : RESNAMES.dat
-#
-# details  : Prints required molecular details for given molid
-# USAGE    : details molid
-# example  : details 0
-#
-# count_waters : Prints Avg. No of waters present around given selection
-# USAGE    : count_waters sel molid start_frame end_frame
-# example  : count_waters "within 5 of resid 235" 0 5 10
-# OUTPUT   : NO-OF-WATERS.dat
-#
-# pbc_box   : Sets or off or show the size of PBC BOX 
-# USAGE     : pbc_box choice 
-# Arguments : on off size 
-# example   : pbc_box on
-# It will on the pbc box for current top molecule\n
-# example2  : pbc_box off 
-# It will off the PBC box
-# example 3 : pbc_box size 
-# It will show the size of BOX (values)
-#
-# show_interactions : Prints Interactions between given two selections within given cutoff
-# USAGE             : show_interactions sel1 sel2 cutoff inf nf 
-# example           : show_interactions "protein" "resid 235" 3.0 5 10
-#    sel1           : Any given selction
-#    sel2           : Any given selction
-#    cutoff         : distance cutoff
-#   inf & nf        : Initial frame & Final framme
-#   OUTPUT          : stores all the information in INTERACTIONS.dat file
-#
-#
-# contact_map    :  Measures all the contacts between given two selections and prints 1 if contact below cutoff , 0 (zero) otherwise
-# USAGE          : contact_map " sel1"  "sel2"  cutoff startframe endframe
-# Example        : contact_map {"resid 1 to 50 and name CA" "resid 51 to 100 and name CA" 6.0 0 10
-# OUTPUT         : stores all data in CONTACT_MAP.dat file
-# 
-# PLOTTING DATA : gnuplot >>  splot "contact_map.dat" u 1:2:3 w p " 
-#                 gnuplot >>  set view 0,0,1
-#                 gnuplot >>  replot
-#
-#
-#
-# count_hbonds     : Measures No of HBonds between given two donor and acceptor selections within given cutoff and angle_cutoff
-# USAGE            : count_hbonds Donor_sel1  Acceptor_sel2  distance_cutoff angle_cutoff
-# EXAMPLE          : count_hbonds "protein and name N" "protein and name O" 3.0 30
-# OUTPUT           : data will be store in HBONDS_COUNT.dat, Which contains Frame vs No.of Hbonds (You can plot this data as Frames v/s No. of Hbonds)
-#
-#
-# show_hbonds      : Prints the HBonds between given DONOR and ACCEPTOR selections within given distance & angle cutoff.
-# USAGE            : show_hbonds  Donor_sel1 Acceptor_sel2 distance_cutoff angle_cutoff <initial frame>  <end frame> 
-# EXAMPLE          : show_hbonds "protein and name N" "protein and name O" 3.0 30 5 10
-# OUTPUT           : data will be store in HBONDS.dat.
-#
-#
-# HB_occupancy   :  Prints the HBONDS occupancy for given selctions for selected frames
-# USAGE          : HB_occupancy sel1 sel2 distance_cutoff angle_cutoff start_frame end_frame
-# EXAMPLE        : HB_occupancy "protein" "resid 235" 3.0 30 0 20
-# ARGUMENTS      :
-#  SELECTION1      : ANY DONOR SELECTION
-#  SELECTION2      : ANY ACCEPTOR SELECTION
-#  DISTANCE_CUTOFF : Distance cutoff to measure HBonds
-#  ANGLEE_CUTOFF   : Angle cutoff to measure HBonds
-#  START_FRAME     : Starting Frame Number
-#  END_FRAME       : End Frame Number
-#
-#
-# save_image  :
-# UASAGE      :save_image molid filename
-# EXAMPLE     : save_image top my_image
-# ( extension of file not required )
-#
-# save_movie  : RENDER MOVIE IN  GIF FORMAT FOR GIVEN MOLID
-# USAGE       : save_movie molid filename "
-#  (no extension of filename is required ) 
-# EXAMPLE     : save_movie top my_protein 
-# EXAMPLE     : save_movie 1 drug_protein
-# OUTPUT      : Genarates filename.gif file 
-#
+   PURPOSE       : Prints RESID and corresponding RESNAME for given selection and for given frames
+   USAGE         : show_residues sel molid <initial frame>  <final frame>  [INTIAL AND FINAL FRAMES ARE OPTIONAL]
+   EXAMPLE       : show_residues "resid 170 to 180" top 0 5
+   EXAMPLE1      : show_residues "(not resname WAT) and within 3 of resid 235" 0 5 10
+   EXAMPLE2      : show_residues "protein and hydrophobic " top 1 0
+   EXAMPLE3      : show_residues "protein and basic" top 
+    " In Example3 frame numbers are optional , if you omits frame numbers it prints all basic residues from zeroth frame"
+   OUTPUT        : Generates data into a file  "RESNAMES.dat ".
+
+10.Command Name  : details
+   PURPOSE       : Prints required molecular details for given molid
+   USAGE         : details molid
+   EXAMPLE       : details 1
+   EXAMPLE1      : details top
+   
+ 11.Command Name : count_waters
+    PURPOSE      : Prints Avg. No of waters of entire trajectory or for selcted frames which are present around given selection
+    USAGE        : count_waters "sel" molid start_frame end_frame
+    EXAMPLE      : count_waters "within 5 of resid 235" 0 5 10
+    OUTPUT       : Generates data into a file "NO-OF-WATERS.dat".
+
+12.Command Name  : pbc_box
+   PURPOSE       : Sets BOX ON or OFF or shows the size of PBC BOX 
+   USAGE         : pbc_box {choice} 
+   ARGUMENTS     : on, off, size 
+   EXAMPLE       : pbc_box on
+   ( It will ON the pbc box for current top molecule)
+   EXAMPLE1      : pbc_box off 
+   ( It will off the PBC box )
+   EXAMPLE2      : pbc_box size 
+   ( It  prints the size of BOX (values) on Tk console)
+
+13.Command Name  : show_interactions
+   PURPOSE       : Prints Interactions between given two selections within given DISTANCE cutoff
+   USAGE         : show_interactions sel1 sel2 cutoff <start frame> <end frame> 
+   EXAMPLE       : show_interactions "protein" "resid 143" 3.0 5 10
+   (It prints all interactions within cutoff of 3.0 (A) between protein and resid 143 of all atoms )
+   [OUTPUT FORMAT: index_A resid_A resname_A (atom type A)--- index_B resid_B resname_B (atom type B) -- Distance ]
+   ARGUMENTS     :
+      sel1       : Any given  atom selction
+      sel2       : Any given atom selction
+      cutoff     : distance cutoff
+      start frame: Starting frame , from here start analysing
+      end frame  : Final framme , It stops here
+   OUTPUT        : Stores all the information in "INTERACTIONS.dat" file
+
+14.Command Name  : contact_map
+   PURPOSE       :  Measures all the contacts between given two selections and
+                    Prints 1 (one) if contact is below cutoff , 0 (zero) otherwise
+   USAGE         : contact_map " sel1"  "sel2"  cutoff startframe endframe
+   Example       : contact_map "resid 1 to 50 and name CA" "resid 51 to 100 and name CA" 6.0 0 10
+   OUTPUT        : Stores all data in "CONTACT_MAP.dat" file.
+   OUTPUT FORMAT : RESID_A  RESID_B 1/0 DISTANCE
+   
+   PLOTTING DATA : gnuplot >>  splot "CONTACT_MAP.dat" u 1:2:3 w p notitle 
+                   gnuplot >>  set view 0,0,1
+                   gnuplot >>  replot
+   It generates a beautiful CONTACT MAP 3D image.
+
+15.Command Name   : count_hbonds
+   PURPOSE        : Prints AVG No. of HBonds between given DONOR and ACCEPTOR selections & DIST_cutoff and angle_cutoff
+   USAGE          : count_hbonds "Donor_sel1"  "Acceptor_sel2"  distance_cutoff angle_cutoff
+   EXAMPLE        : count_hbonds "protein and name N" "protein and name O" 3.0 30
+   OUTPUT         : Stores data in file "HBONDS_COUNT.dat".
+   (Which contains Frame vs No.of Hbonds ,You can plot this data as Frames v/s No. of Hbonds)
+   NOTE           : It assumes that molis as "top" or zero. It prints AVG HBONDS per FRAME.
+
+16.Command Name   : show_hbonds
+   PURPOSE        : Prints the all HBonds between given DONOR and ACCEPTOR selections within given distance & angle cutoff.
+   USAGE          : show_hbonds  "Donor_sel1" "Acceptor_sel2" distance_cutoff angle_cutoff <initial frame>  <end frame> 
+   EXAMPLE        : show_hbonds "protein and name N" "protein and name O" 3.0 30 5 10
+   OUTPUT         : Stores all HBONDS data in HBONDS.dat.
+   OUTPUT FORMAT  : index_D resid_D resname_D (type) -- index_A resid_A resname_A(type) --- Distance
+   (Prints and Stores data for every Frame ) 
+   NOTE           : Always Atomselctons should be DONOR and ACCEPTOR , (not ACCEPTOR and DONOR)
+   
+ 17.Command Name  :  HB_occupancy
+    PURPOSE       :  Prints only the HBONDS occupancy for given selctions for selected frames
+    USAGE         :  HB_occupancy "DONOR_sel1" "ACCEPTOR_sel2" distance_cutoff angle_cutoff <start_frame> <end_frame>
+    EXAMPLE       :  HB_occupancy "protein" "resid 147" 3.0 30 0 20
+    OUTPUT FORMAT :  RESID_D  RESNAME_D --  RESID_A  RESNAME_A    ---OCUPANCY (%)
+    EXAMPLE       :  140  LYS -- 147 ARG  --- 80.00 %   (Pints for all selected frames) 
+    ARGUMENTS     :
+     SELECTION1   : MUST BE ANY DONOR SELECTION
+     SELECTION2   : MUST BE ANY ACCEPTOR SELECTION
+     CUTOFF       : Distance cutoff to measure HBonds
+     ANGLEE_CUTOFF: Angle cutoff to measure HBonds
+     START_FRAME  : Starting Frame Number
+     END_FRAME    : End Frame Number
+
+18.Command Name   : save_image
+   PURPOSE        : Renders a high quality image using Tachyon for currently active frame.
+   UASAGE         : save_image {molid} filename
+   EXAMPLE        : save_image top my_image
+   ( extension of file not required )
+   OUTPUT FILES   : filename.dat , filename.dat.tga, filename.dat.jpg
+   Above example produces my_image.dat , my_image.dat.tga, & my_image.dat.jpg.
+   
+ 19.Command Name  : save_movie
+    PURPOSE       : GENERATES A MOVIE IN  GIF FORMAT FOR GIVEN MOLID & FOR SELECTED FRAMES
+    USAGE         : save_movie molid filename <start frame> <end frame> 
+   (no extension of filename is required ) 
+    EXAMPLE1      : save_movie top my_protein 0 20
+    EXAMPLE2      : save_movie 1 drug_protein 20 40
+    OUTPUT        : Example1 Genarates "my_protein.gif" file from zeroth frame to 20th frame.
+                  : Example2 generates "drug_protien.gif" file from 20th frame to 40th frame.
+                  
+         NOTE : Other Movie formats will be updated soon.
+         
+         
+         #================================================================================#
+         #                                                                                #
+         #                       WRITTEN BY ANJI BABU KAPAKAYALA                          #
+         #                    INDIAN INSTITUTE OF TECHNOLOGY,KANPUR.                      #
+         #                            (anjibabu480@gmail.com)                             #
+         #                                                                                #  
+         #================================================================================#
+                  
+                  
+                  
+                  
+                  
+                  
+                  
+                  
+                  
+
 
 
 
