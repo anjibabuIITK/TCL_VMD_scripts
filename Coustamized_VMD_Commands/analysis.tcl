@@ -1375,8 +1375,8 @@ puts "   USAGE    : save_pdb atomselection start_frame end_frame stride molid fi
  puts "   Filetypes Available  : ABINIT , bgf, binpos, crd, crdbox, dcd, gro, trr, js, lammpstrj, mol2,"
  puts "                          namdbin, pdb, pqr, rst7,POSCAR, xbgf, xyz, dtr, mae, dms, hoomd \n\n"
 #--------------------#
-puts "   EXAMPLE  : save_pdb 'protein' 5 100 5 top file.pdb \n"
-puts "   Above example , It will write file.pdb for 'protein' from frame 5 to 100 by skipping every 5 frames. \n\n\n"
+#puts "   EXAMPLE  : save_pdb 'protein' 5 100 5 top file.pdb \n"
+#puts "   Above example , It will write file.pdb for 'protein' from frame 5 to 100 by skipping every 5 frames. \n\n\n"
 } elseif {"save_image" == $command } {
 puts "    PURPOSE    : Rendering image of currently active frame of given molid.\n\n"
 puts "    UASAGE     : save_image molid filename \n\n"
