@@ -62,9 +62,10 @@
 # Align    : align molid1 molid2
 #example   : align 0 1
 #
-# RMSD     : Measures Avg.RMSD & std for given selections
-# USAGE    : rmsd sel1 molid1 sel2 molid2
-# example  : rmsd "backbone" 0 "backbone" 1
+# RMSD     : Measures Avg.RMSD & std for given selections and molecules.
+# USAGE    : rmsd {Atomselection} {molid1} {molid2}
+# example  : rmsd "backbone" 0  1
+# example  : rmsd "protein" top top
 #
 #IF both the molids are same , RMSD will be calculated by taking zeroth frame as reference
 #
@@ -189,28 +190,28 @@ $compare_sel  move $transform_matrx
 puts "Alignment Done. "
 }
 # ============================== Measuring RMSD=========================
-proc rmsd {sel1 molid1 sel2 molid2 } {
+proc rmsd {sel molid1 molid2 } {
 set n [molinfo top get numframes ]
 set outfile [open "RMSD.dat" w ]
 #printing input given by user
 puts $outfile "Given INPUT: \n==================\n"
-puts $outfile "Sel1 :$sel1 \nMolid : $molid1\n\n Sel2 : $sel2\nMolid : $molid1\n\n"
+puts $outfile " AtomSelection :$sel \nMolid1 : $molid1\n\n Molid2 : $molid2\n\n"
 puts $outfile "Total Frames found : $n \n\n"
 puts $outfile "   Frame    RMSD\n==================\n"
 puts "Given INPUT: \n==================\n"
-puts "Sel1 :$sel1 \nMolid : $molid1\n\n Sel2 : $sel2\nMolid : $molid1\n\n"
+puts " Atom Selection :$sel \nMolid1 : $molid1\n\nMolid2 : $molid2\n\n"
 puts "Total Frames found : $n \n\n"
 set sum 0
 #=========CYCLE STARTS==============================
 for {set i 0} {$i <= $n} {incr i} {
 #=========IF BOTH MOLID SAME======================== 
   if {$molid1 == $molid2} {
-set selA [atomselect $molid1 $sel1 frame 0]
-set selB [atomselect $molid2 $sel2 frame $i]
+set selA [atomselect $molid1 $sel frame 0]
+set selB [atomselect $molid2 $sel frame $i]
   } else {
 #=========IF BOTH MOLID ARE NOT SAME================
-set selA [atomselect $molid1 $sel1 frame $i]
-set selB [atomselect $molid2 $sel2 frame $i]
+set selA [atomselect $molid1 $sel frame $i]
+set selB [atomselect $molid2 $sel frame $i]
         }
 set transform_matrx [ measure fit $selB $selA ]
 #set mov_sel [atomselect 0 "all" frame $i ]
@@ -231,12 +232,12 @@ set avg_rmsd [expr $sum/$n]
 set sum 0
 for {set i 0} {$i <= $n} {incr i} {
   if {$molid1 == $molid2} {
-set selA [atomselect $molid1 $sel1 frame 0]
-set selB [atomselect $molid2 $sel2 frame $i]
+set selA [atomselect $molid1 $sel frame 0]
+set selB [atomselect $molid2 $sel frame $i]
   } else {
 #=========IF BOTH MOLID ARE NOT SAME================
-set selA [atomselect $molid1 $sel1 frame $i]
-set selB [atomselect $molid2 $sel2 frame $i]
+set selA [atomselect $molid1 $sel frame $i]
+set selB [atomselect $molid2 $sel frame $i]
         }
 #weighted rmsd
 set rmsdAB [measure rmsd $selA $selB weight mass ]
@@ -1269,9 +1270,10 @@ puts " PUPOSE    : Aligns molecules corresponding to given  molid1 & molid2 \n\n
 puts " USAGE     : align molid1 molid2 \n\n"
 puts " example   : align 0 1 "
 } elseif { "rmsd" == $command } {
-puts " PURPOSE  : Measures Avg.RMSD & std for given selections \n\n"
-puts " USAGE    : rmsd sel1 molid1 sel2 molid2 \n\n"
-puts " example  : rmsd 'backbone' 0 'backbone' 1 \n"
+puts " PURPOSE  : Measures Avg.RMSD & std for given selections and molecules  \n\n"
+puts " USAGE    : rmsd {Atomselction} {molid1} {molid2} \n\n"
+puts " EXAMPLE  : rmsd 'backbone' 0 1 "
+puts " EXAMPLE  : rmsd 'protein' top top\n"
 puts " OUTPUT   : Data will be stored in RMSD.dat file\n"
 puts " IF both the molids are same , RMSD will be calculated by taking zeroth frame as reference "
 } elseif { "angle" == $command } {
