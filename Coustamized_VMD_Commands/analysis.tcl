@@ -1384,6 +1384,10 @@ puts "    PURPOSE    : Rendering image of currently active frame of given molid.
 puts "    UASAGE     : save_image molid filename \n\n"
 puts "    EXAMPLE    : save_image top my_image \n"
 puts "     ( extension of file not required ) \n"
+puts "    OUTPUT     : Generates three files."
+puts "               : filename.dat"
+puts "               : filename.dat.tga"
+puts "               : filename.dat.jpg\n"
 } elseif {"save_movie" == $command} {
 puts "\n   PURPOSE  : RENDER MOVIE IN  GIF FORMAT FOR GIVEN MOLID \n\n"
 puts "   USAGE    : save_movie molid filename inf nf"
