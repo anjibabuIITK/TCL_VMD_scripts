@@ -87,9 +87,10 @@ AVAILABLE COMMANDS AND DETAILS :
 
 
 5.Command Name   : rmsd
-  PURPOSE        : Measures Avg.RMSD & std for given selections
-  USAGE          : rmsd "sel1" "molid1" "sel2" "molid2"
-  EXAMPLE        : rmsd "backbone" 0 "backbone" 1
+  PURPOSE        : Measures Avg.RMSD & std for given selections & molecules.
+  USAGE          : rmsd "sel" "molid1"  "molid2"
+  EXAMPLE        : rmsd "backbone" 0 1
+  EXAMPLE1       : rmsd "protein" top top
   OUTPUT         : Generates data into a file "RMSD.dat".
   (IF both the molids are same , RMSD will be calculated by taking zeroth frame as reference)
 
