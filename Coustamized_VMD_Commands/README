@@ -53,6 +53,10 @@ TIP OF THE DAY  :
   Ramachandran plot
   HB plot
   PBC Wrapping
+  measure Solvent Accessble Surface Area (SASA)
+  Radial distribution function [g(r)]
+  Radius of gyration
+  Histogram (Probability Distribution )
   delete_frame : Deletes the frames for given intial and final frames
 #====================================================
 
