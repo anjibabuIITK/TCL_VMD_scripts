@@ -6,41 +6,49 @@
            (anjibabu480@gmail.com)
 
  PURPOSE : To do cluster analysis
- USAGE : source clustering.tcl in VMD Tk console.
-       : clustering {Atomselection} {rmsd_cutoff} {step size} {frame_args}
+ USAGE   : source clustering.tcl in VMD Tk console.
+         : clustering {Atomselection} {rmsd_cutoff} {step size} {frame_args}
 
- Arguments :
- Atomselect: Any atom selection
+ Arguments   :
+ Atomselect  : Any atom selection
  rmsd_cutoff : RMSD cutoff
- Step_size : STEP SIZE ( nothing but skip)
- frame_args: Initial & final frame numbers
+ Step_size   : STEP SIZE ( nothing but skip)
+ frame_args  : Initial & final frame numbers
+ 
  Default Arguments :
- Dist_func : Distance Function is set to rmsd as default.
- num : No. of Clusters are fixed to default vaule 3
+ Dist_func         : Distance Function is set to rmsd as default.
+ num               : No. of Clusters are fixed to default vaule 3
 
  EXAMPLES :
  EXAMPLE1 : clustering "(protein) and backbone" 1.0 2
  EXAMPLE2 : clustering "(protein) and backbone" 1.0 2 5
  EXAMPLE3 : clustering "(protein) and backbone" 1.0 2 5 25
- Example1, measures the clusters of given selections with rmsd cutoff 1.0 and step size 2 for zeroth frame to final frame in trajectory.
- Example2, measures the clusters of given selections with rmsd cutoff 1.0 and step size 2 from frame 5 to final frame in trajectory.
- Example3, measures the clusters of given selections with rmsd cutoff 1.0 and step size 2 from frame 5 to frame 25 in trajectory.
+ 
+ Example1, measures the clusters of given selections with rmsd cutoff 1.0 and 
+           step size 2 for zeroth frame to final frame in trajectory.
+ 
+ Example2, measures the clusters of given selections with rmsd cutoff 1.0 and 
+           step size 2 from frame 5 to final frame in trajectory.
+ 
+ Example3, measures the clusters of given selections with rmsd cutoff 1.0 and
+           step size 2 from frame 5 to frame 25 in trajectory.
+ 
  (At present No. of clusters are fixed to 3)
  Default Distance function is rmsd. but you can change to fitrmsd or rgyd or rmsd
 
-
 OUTPUT FILES : 
 It shows the clusters on New graphical representation and stores the data in 4 files as well.
+
 CLUSTER-A.xyz
 CLUSTER-B.xyz
 CLUSTER-C.xyz
 UNCLUSTER.xyz
 
 EXAMPLE OUTPUT of this code looks like this. ( on Tk console) 
-#=============================================================================================#
+#=====================================================================================#
 
 	  	  WELCOME TO CLUSTERING ANALYSIS PLUGIN 
-    	  =====================================
+    	          =====================================
 
 
  
@@ -78,12 +86,10 @@ EXAMPLE OUTPUT of this code looks like this. ( on Tk console)
  
  Writing OUTPUT files.........
 
- 10 %      20 %      30 %      40 %      50 %      60 %      70 %      80 %      90 %      100 %      
+ 10 %    20 %    30 %    40 %    50 %    60 %    70 %    80 %    90 %    100 %      
 
  OUTPUT files :
 ---------------
-
- 
  CLUSTER-A.xyz
  CLUSTER-B.xyz
  CLUSTER-C.xyz 
@@ -94,11 +100,18 @@ EXAMPLE OUTPUT of this code looks like this. ( on Tk console)
 
  	  	 $********** ANJI BABU KAPAKAYALA **********$
 
-#======================================================================================================#												 #
-#                             WRITTEN BY ANJI BABU KAPAKAYALA     	                	       # 
-#======================================================================================================#
+
+CHEERS ....!!!!!!
 
 
+#=================================================================================#												 #
+#                        WRITTEN BY ANJI BABU KAPAKAYALA        	    	  # 
+#=================================================================================#
+
+
+
+date  :27/07/2017
+place : kanpur,INDIA.
 
 
 
