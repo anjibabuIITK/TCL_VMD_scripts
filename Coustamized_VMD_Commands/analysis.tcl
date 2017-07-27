@@ -1695,6 +1695,10 @@ puts " Example3, measures the clusters of given selections with rmsd cutoff 1.0 
 puts "           step size 2 from frame 5 to frame 25 in trajectory.\n"
 puts "  (At present No. of clusters are fixed to 3) "
 puts "  Default  Distance function is rmsd. but you can change to fitrmsd or rgyd or rmsd"
+puts " \n OUTPUT Files :\n============\n"
+Puts " Generates 4 output files."
+puts " CLUSTER-A.xyz\n CLUSTER-B.xyz\n CLUSTER-C.xyz\n UNCLUSTER.xyz "
+
 #
 } else  { puts " Command  Not Found " }
 puts "\n\n \n    $************* ANJI BABU KAPAKAYALA *************$\n\n"

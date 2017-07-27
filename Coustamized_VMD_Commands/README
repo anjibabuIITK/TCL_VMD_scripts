@@ -304,8 +304,13 @@ AVAILABLE COMMANDS AND DETAILS :
 
     (At present No. of clusters are fixed to 3) 
      Default Distance function is rmsd. but you can change to fitrmsd or rgyd or rmsd.
-    
-         
+      
+      OUTPUT FILES : Generates 4 files 
+       CLUSTER-A.xyz
+       CLUSTER-B.xyz
+       CLUSTER-C.xyz
+       UNCLUSTER.xyz
+      
         
          
          
