@@ -2,8 +2,8 @@
  TCL VMD SCRIPT TO DO CLUSTER ANALYSIS
 
  Authour : ANJI BABU KAPAKYALA
- IIT KANPUR, INDIA.
- (anjibabu480@gmail.com)
+           IIT KANPUR, INDIA.
+           (anjibabu480@gmail.com)
 
  PURPOSE : To do cluster analysis
  USAGE : source clustering.tcl in VMD Tk console.
@@ -95,9 +95,6 @@ EXAMPLE OUTPUT of this code looks like this. ( on Tk console)
  	  	 $********** ANJI BABU KAPAKAYALA **********$
 
 #========================================================================================================#
-
-
-
 
 
 
