@@ -24,25 +24,31 @@
  EXAMPLE2 : clustering "(protein) and backbone" 1.0 2 5
  EXAMPLE3 : clustering "(protein) and backbone" 1.0 2 5 25
  
- Example1, measures the clusters of given selections with rmsd cutoff 1.0 and step size 2 for zeroth frame to final frame in trajectory.
- Example2, measures the clusters of given selections with rmsd cutoff 1.0 and step size 2 from frame 5 to final frame in trajectory.
- Example3, measures the clusters of given selections with rmsd cutoff 1.0 and step size 2 from frame 5 to frame 25 in trajectory.
+ Example1, measures the clusters of given selections with rmsd cutoff 1.0 and 
+           step size 2 for zeroth frame to final frame in trajectory.
+ 
+ Example2, measures the clusters of given selections with rmsd cutoff 1.0 and 
+           step size 2 from frame 5 to final frame in trajectory.
+ 
+ Example3, measures the clusters of given selections with rmsd cutoff 1.0 and
+           step size 2 from frame 5 to frame 25 in trajectory.
  
  (At present No. of clusters are fixed to 3)
  Default Distance function is rmsd. but you can change to fitrmsd or rgyd or rmsd
 
 OUTPUT FILES : 
 It shows the clusters on New graphical representation and stores the data in 4 files as well.
+
 CLUSTER-A.xyz
 CLUSTER-B.xyz
 CLUSTER-C.xyz
 UNCLUSTER.xyz
 
 EXAMPLE OUTPUT of this code looks like this. ( on Tk console) 
-#=============================================================================================#
+#=====================================================================================#
 
 	  	  WELCOME TO CLUSTERING ANALYSIS PLUGIN 
-    	  =====================================
+    	          =====================================
 
 
  
@@ -84,8 +90,6 @@ EXAMPLE OUTPUT of this code looks like this. ( on Tk console)
 
  OUTPUT files :
 ---------------
-
- 
  CLUSTER-A.xyz
  CLUSTER-B.xyz
  CLUSTER-C.xyz 
