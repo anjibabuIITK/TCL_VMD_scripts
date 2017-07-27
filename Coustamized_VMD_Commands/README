@@ -34,6 +34,8 @@ TIP OF THE DAY  :
   Measure  Angle
   Measure Dihedral
   Contact map
+  clustering
+  sasa : solvent accessible surface area 
   Print  Interactions within given cutoff
   Print No. of waters within given cutoff
   Print No. of HBonds within given cutoff
@@ -269,10 +271,45 @@ AVAILABLE COMMANDS AND DETAILS :
      Available Filetypes  : ABINIT , bgf, binpos, crd, crdbox, dcd, gro, trr, js, lammpstrj, mol2,
                             namdbin, pdb, pqr, rst7,POSCAR, xbgf, xyz, dtr, m"ae, dms, hoomd .
          
-         
-         
+   21.Command Name : sasa    
+      PURPOSE      : Measures Solvent Accessible Surface Area (SASA) 
+      USAGE        : sasa 'SELCTION'
+      EXAMPLE      : sasa 'resid 170 to 180' 
+      OUTPUT       : SASA.dat
+   
+   22.Command Name : clustering
+      PURPOSE      : To do cluster analysis.
+      USAGE        : clustering {Atomselection} {rmsd_cutoff} {step size} {frame_args}
+      Arguments    : 
+      Atomselect   : Any atom selection 
+      rmsd_cutoff  : RMSD cutoff 
+      Step_size    : STEP SIZE ( nothing but skip)
+      frame_args   : Initial & final frame numbers 
+      Default Arguments :
+      Dist_func : Distance Function is set to rmsd as default.
+      num       : No. of Clusters are fixed to default vaule 3
+      EXAMPLES  :
+      EXAMPLE1  : clustering '(protein) and backbone' 1.0 2 
+      EXAMPLE2  : clustering '(protein) and backbone' 1.0 2 5
+      EXAMPLE3  : clustering '(protein) and backbone' 1.0 2 5 25
+
+      Example1, measures the clusters of given selections with rmsd cutoff 1.0 and 
+                step size 2 for zeroth frame to final frame in trajectory.
+                
+      Example2, measures the clusters of given selections with rmsd cutoff 1.0 and 
+                step size 2 from frame 5 to final frame in trajectory.
+                
+      Example3, measures the clusters of given selections with rmsd cutoff 1.0 and 
+                step size 2 from frame 5 to frame 25 in trajectory.
+
+    (At present No. of clusters are fixed to 3) 
+     Default Distance function is rmsd. but you can change to fitrmsd or rgyd or rmsd.
+    
          
         
+         
+         
+         
          
          #================================================================================#
          #                                                                                #

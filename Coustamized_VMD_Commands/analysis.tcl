@@ -1,4 +1,4 @@
-# TCL VMD Script for analyse trajectory and Can Be used as Costamized Commands in VMD
+# TCL VMD Script for analyse trajectory
 #
 # VERSION  : analysis_script_V 1.0
 #
@@ -6,13 +6,7 @@
 #             IIT KANPUR, INDIA.
 #             ( anjibabu480@gmail.com)
 #
-# Step 1    :  SOURCE analysis.tcl in VMD Tk  console
-# Step 2    :  Command_name {Arguments}
-#
-# After Sourcing analysis.tcl script in VMD console, type following
-#    my_commands show     : List out all available commands from this script.
-#    --help command_name  : Shows the details of command ,with examples.
-#
+# SOURCE analysis.tcl in VMD Tk console
 #
 #  Following analysis can be done by using this script :
 #
@@ -23,14 +17,14 @@
 #  Measure Dihedral
 #  Contact map
 #  Print  Interactions within given cutoff
-#  Print No. of waters within given cutoff
+#  Print No. of watrs within given cutoff
 #  Print No. of HBonds within given cutoff
 #  Print residue names and resid for given sel 
 #  Molecule details ( No of frames, No of atoms, No of waters, Box size
-#  set pbc_box and off Pbc_box and prints box size
+#  set pbc_box and off Pbc_box
 #  save_pdb
 #  save_image
-#  save_movie   : creates a movie for given frames
+#  sasa
 #  save_coordinates
 #  --help : which gives details of command
 #  my_commands show : shows avalilable commands
@@ -38,10 +32,13 @@
 #====================================================
 #  Future updates:
 #  save_view    : saves the visivilization of current vmd 
-#  Ramachandran plot
-#  HB plot
-#  PBC Wrapping
+#  save_movie   : creates a movie for given frames
 #  delete_frame : Deletes the frames for given intial and final frames
+#  Histogram : probability distribution for any selected data
+#  Radial distribution plot : 
+# PBC wrapping
+# Ramachandran plot
+# HB plot
 #====================================================
 #
 #
@@ -62,9 +59,9 @@
 # Align    : align molid1 molid2
 #example   : align 0 1
 #
-# RMSD     : Measures Avg.RMSD & std for given selections and molecules.
-# USAGE    : rmsd {Atomselection} {molid1} {molid2}
-# example  : rmsd "backbone" 0  1
+# RMSD     : Measures Avg.RMSD & std for given selections
+# USAGE    : rmsd Atomselection molid1  molid2
+# example  : rmsd "backbone" top  1
 # example  : rmsd "protein" top top
 #
 #IF both the molids are same , RMSD will be calculated by taking zeroth frame as reference
@@ -168,6 +165,36 @@
 # EXAMPLE     : save_movie 1 drug_protein
 # OUTPUT      : Genarates filename.gif file 
 #
+#      
+# TCL script Measuring Solvent Accessible Surface Area (SASA) 
+# SASA: 
+# USAGE   : sasa "SELCTION"
+# EXAMPLE : sasa "resid 170 to 180"
+# OUTPUT  : SASA.dat
+#
+# clustering: To do cluster analysis 
+# USAGE     : source clustering.tcl in VMD Tk console.
+#           : clustering {Atomselection} {rmsd_cutoff} {step size} {frame_args}
+#
+# Arguments :
+# Atomselect:  Any atom selection
+# rmsd_cutoff : RMSD cutoff 
+# Step_size :   STEP SIZE ( nothing but skip)
+# frame_args: Initial & final frame numbers
+# Default Arguments : 
+# Dist_func : Distance Function is set to rmsd as default.
+# num       : No. of Clusters are fixed to default vaule 3
+#
+# EXAMPLES  :
+# EXAMPLE1  : clustering "(protein) and backbone" 1.0 2 
+# EXAMPLE2  : clustering "(protein) and backbone" 1.0 2 5
+# EXAMPLE3  : clustering "(protein) and backbone" 1.0 2 5 25
+# Example1, measures the clusters of given selections with rmsd cutoff 1.0 and step size 2 for zeroth frame to final frame in trajectory.
+# Example2, measures the clusters of given selections with rmsd cutoff 1.0 and step size 2 from frame 5 to final frame in trajectory.
+# Example3, measures the clusters of given selections with rmsd cutoff 1.0 and step size 2 from frame 5 to frame 25 in trajectory.
+#  (At present No. of clusters are fixed to 3)
+#  Default  Distance function is rmsd. but you can change to fitrmsd or rgyd or rmsd
+#
 #
 #=====================Allignment=====================================
 proc align {molid1 molid2 } {
@@ -195,11 +222,11 @@ set n [molinfo top get numframes ]
 set outfile [open "RMSD.dat" w ]
 #printing input given by user
 puts $outfile "Given INPUT: \n==================\n"
-puts $outfile " AtomSelection :$sel \nMolid1 : $molid1\n\n Molid2 : $molid2\n\n"
+puts $outfile "Sel :$sel \nMolid : $molid1\n\n Molid : $molid1\n\n"
 puts $outfile "Total Frames found : $n \n\n"
 puts $outfile "   Frame    RMSD\n==================\n"
 puts "Given INPUT: \n==================\n"
-puts " Atom Selection :$sel \nMolid1 : $molid1\n\nMolid2 : $molid2\n\n"
+puts "Sel :$sel \nMolid : $molid1\n\n Molid : $molid1\n\n"
 puts "Total Frames found : $n \n\n"
 set sum 0
 #=========CYCLE STARTS==============================
@@ -1077,12 +1104,14 @@ puts  "\n\n\n\n\n             $***************     ANJI BABU KAPAKAYALA     ****
 #=========================SAVE COORDINATES========================================================#
 # SAVE COORDINATES
 #
-# USAGE    : save_pdb atomselection start_frame end_frame stride molid filename
+# USAGE    : save_coordinates atomselection molid  filename filetype  tart_frame end_frame stride
 #
-# EXAMPLE  : save_pdb "protein" 5 100 5 top file.pdb
-# Above example , It will write file.pdb for "protein" from frame 5 to 100 by skipping every 5 frames.
+# EXAMPLE  : save_coordinates "protein"  top file.mol2 mol2 5 100 5
+# EXAMPLE2  : save_coordinates "protein"  top file.gro gro 5 100 5
+# Above example , writes filename.mol2 for "protein" from frame 5 to 100 by skipping every 5 frames.
+# Above example2 , writes filename.gro for "protein" from frame 5 to 100 by skipping every 5 frames.
 #
-proc save_coordinates { sel inf nf stride molid filenam filetype} {
+proc save_coordinates { sel molid filenam filetype  inf nf stride } {
 #---------Print Input
  puts " \n\n Given Input  :\n-----------------\n"
  puts "  Atomselection  : $sel "
@@ -1221,35 +1250,270 @@ puts " \n\n $filname.gif has created successfully.\n\n"
 puts " \n\n  $***********    ANJI BABU KAPKAYALA     ***********$\n\n"
 }
 #
+#==========================++SASA=============================
+# TCL script Measuring Solvent Accessible Surface Area (SASA) 
+#
+# USAGE   : sasa "SELCTION"
+# EXAMPLE : sasa "resid 170 to 180"
+# OUTPUT  : SASA.dat
+#
+proc sasa {sel} {
+#puts -nonewline "\n \t \t Selection: "
+#gets stdin selmode
+# selection
+set output [open "SASA.dat" w]
+set n [molinfo top get numframes]
+puts $output "\n Total Frames found : $n \n"
+set sum 0
+for {set i 0} {$i <= $n} {incr i} {
+set selA [atomselect top $sel frame $i] 
+set protein [atomselect top "protein" frame $i]
+# sasa calculation loop
+#	molinfo top set frame $i
+	set sasa [measure sasa 1.4 $protein -restrict $selA]
+       	puts $output [format " %5d   %7.2f" $i $sasa]
+        puts [format "%5d SASA : %7.2f" $i  $sasa]
+        set sum [expr $sum + $sasa ]
+}
+#-----------Avg over trajectory
+set avg_sasa [expr $sum/$n]
+        puts [format "\n Avg. Solvent Accessible Surface Area : %7.2f\n" $avg_sasa ]
+        puts $output [format "\n Avg. Solvent Accessible Surface Area : %7.2f\n" $avg_sasa ]
+        puts "Done."	
+close $output
+}
+#=====================================CLUSTERING ANALYSIS=====================
+# TCL VMD SCRIPT TO DO CLUSTER ANALYSIS
+#
+# Authour : ANJI BABU KAPAKYALA
+#           IIT KANPUR, INDIA.
+#           (anjibabu480@gmail.com)
+# 
+# PURPOSE   : To do cluster analysis 
+# USAGE     : source clustering.tcl in VMD Tk console.
+#           : clustering {Atomselection} {rmsd_cutoff} {step size} {frame_args}
+#
+# Arguments :
+# Atomselect:  Any atom selection
+# rmsd_cutoff : RMSD cutoff 
+# Step_size :   STEP SIZE ( nothing but skip)
+# frame_args: Initial & final frame numbers
+# Default Arguments : 
+# Dist_func : Distance Function is set to rmsd as default.
+# num       : No. of Clusters are fixed to default vaule 3
+#
+# EXAMPLES  :
+# EXAMPLE1  : clustering "(protein) and backbone" 1.0 2 
+# EXAMPLE2  : clustering "(protein) and backbone" 1.0 2 5
+# EXAMPLE3  : clustering "(protein) and backbone" 1.0 2 5 25
+# Example1, measures the clusters of given selections with rmsd cutoff 1.0 and step size 2 for zeroth frame to final frame in trajectory.
+# Example2, measures the clusters of given selections with rmsd cutoff 1.0 and step size 2 from frame 5 to final frame in trajectory.
+# Example3, measures the clusters of given selections with rmsd cutoff 1.0 and step size 2 from frame 5 to frame 25 in trajectory.
+#  (At present No. of clusters are fixed to 3)
+#  Default  Distance function is rmsd. but you can change to fitrmsd or rgyd or rmsd
+#
+#
+#
+proc clustering {sel1 rcutoff step_size args } {
+#=====================
+#puts -nonewline "\nEnter Your Selction :"
+#flush stdout
+#gets stdin sel
+#puts "$sel"
+#-----default number of clusters
+set number 3
+#---------------------------------------#
+set nframes [molinfo top get numframes]
+#---------------Opening OUTPUT files
+set file1 [open "CLUSTER-A.xyz" w]
+set file2 [open "CLUSTER-B.xyz" w]
+set file3 [open "CLUSTER-C.xyz" w]
+set file4 [open "UNCLUSTER.xyz" w]
+#---------------Settingup arguments----#
+  set sel $sel1
+  set selA [atomselect top $sel ]
+#---------------frames details----------#
+  if {[llength $args] == 0} {
+      set inf 0
+      set nf $nframes
+}
+ if {[llength $args] == 1} {
+    set inf [lindex $args 0]
+    set nf $nframes
+  }
+  if {[llength $args] > 1} {
+    set inf [lindex $args 0]
+    set nf [lindex $args 1]
+    }
+#------------------total frames---------#
+  set totframes [expr $nf - 1 ]
+#------------------PRINT Given DATA-----#
+ puts " \n \t  \t  WELCOME TO CLUSTERING ANALYSIS PLUGIN "
+ puts "    \t  \t  =====================================\n\n"
+ puts " \n No. of frames Found in Trajectory: $nframes\n\n"
+ puts " Given Data :\n =============\n"
+ puts " Atomselection     : $sel1 "
+ puts " Distance Function : rmsd (default) "
+ puts " No. of clusters   : 3    (default) "
+ puts " Rmsd Cutoff       : $rcutoff      "
+ puts " Step size         : $step_size "
+ puts " Starting Frame    : $inf "
+ puts " End Frame         : $nf \n"
+ puts " Analysis will be performed on $inf to $nframes frame(s) \n\n\n"
+#------------------------------------------#
+  # Cluster
+  #set result [measure cluster $selA num $number cutoff $rmsdcutoff first 0 last $totframes  step 2 distfunc rmsd ]
+#selupdate $calc_selupdate weight $calc_weight]
+#  set nclusters [llength $result]
+#  puts "$nclusters"
+#----------------------------------------
+# foreach {listA listB listC listD} [measure cluster $selA num $number cutoff $rmsdcutoff first $inf last $totframes  step 1 distfunc rmsd ] break
+ foreach {listA listB listC listD} [measure cluster $selA num $number cutoff $rcutoff first $inf last $totframes  step $step_size distfunc rmsd ] break
+    set nclustera [llength $listA] ; set nclusterb [llength $listB] ; set nclusterc [llength $listC] ; set nclusterd [llength $listD]
+ puts " CLUSTER-A ($nclustera) :\n $listA \n\n CLUSTER-B ($nclusterb)  :\n $listB \n\n CLUSTER-C ($nclusterc)  :\n $listC \n\n UNCLUSTRED ($nclusterd) : \n $listD\n"
+#-----------------------------------------------
+# update on graphical representation of the above clusters
+#------ListA
+menu graphics on
+#mol delrep replica_number Mol_number
+mol delrep 0 0
+mol delrep 0 0
+mol delrep 0 0
+mol delrep 0 0
+mol representation lines
+mol selection $sel
+mol addrep 0
+mol drawframes 0 0 $listA
+mol modcolor 0 0 ColorID 0
+#------ListAB
+mol representation lines
+mol selection $sel
+mol addrep 0
+mol drawframes 0 1 $listB
+mol modcolor 1 0 ColorID 1
+#------ListC
+mol representation lines
+mol selection $sel
+mol addrep 0
+mol drawframes 0 2 $listC
+mol modcolor 2 0 ColorID 4
+#------ListD
+mol representation lines
+mol selection $sel
+mol addrep 0
+mol drawframes 0 3 $listD
+mol modcolor 3 0 ColorID 7
+mol showrep 0 2 0
+mol showrep 0 0
+#mol showrep 0 2 1
+#mol showrep 0 2 0
+#---------------WRITING OUTPUT----------------------------------------
+puts " \n Writing OUTPUT files.........\n"
+#--------------------Cycle starts
+for {set i 0 ; set d 1} { $i<=$nframes} {incr i; incr d}  {
+#------------------STATUS BAR
+# show activity
+#    if { [expr $d % 10] == 0 } {
+#doble (number) gives floating point
+     set percentage [expr double($d)*100/double($totframes )]
+#int(number) gives intger
+    if { [expr int($percentage) % 10 ] == 0 } {
+      puts -nonewline " [expr int($percentage)] %     "
+ flush stdout
+     }
+#   if { [expr $d % 500] == 0 } { puts " " }
+#    flush stdout
+#   }
+#-------STORING CLUSTER-A
+  foreach list1 $listA {
+    if {$i == $list1 } {
+#puts " Writing CLUSTER-A.xyz :$i"
+#puts "$i : $list1 "
+#set selA [atomselect top $sel frame $i ]
+[atomselect top "all" frame $i] writexyz cluster$i.xyz
+exec cat cluster$i.xyz >> CLUSTER-A.xyz
+exec rm cluster$i.xyz
+}
+}
+#-------STORING CLUSTER-B
+  foreach list2 $listB {
+    if {$i == $list2 } {
+#puts "$i : $list2 "
+#puts " Writing CLUSTER-B.xyz :$i"
+#set selA [atomselect top $sel frame $i ]
+[atomselect top "all" frame $i] writexyz cluster$i.xyz
+exec cat cluster$i.xyz >> CLUSTER-B.xyz
+exec rm cluster$i.xyz
+}
+}
+#-------STORING CLUSTER-C
+  foreach list3 $listC {
+    if {$i == $list3 } {
+#puts "$i : $list3 "
+#puts " Writing CLUSTER-C.xyz :$i"
+#set selA [atomselect top $sel frame $i ]
+[atomselect top "all" frame $i] writexyz cluster$i.xyz
+exec cat cluster$i.xyz >> CLUSTER-C.xyz
+exec rm cluster$i.xyz
+}
+}
+#-------STORING UN CLUSTER-D
+  foreach list4 $listD {
+    if {$i == $list4 } {
+#puts "$i : $list4 "
+#puts " Writing UNCLUSTER.xyz :$i"
+#set selA [atomselect top $sel frame $i ]
+[atomselect top "all" frame $i] writexyz cluster$i.xyz
+exec cat cluster$i.xyz >> UNCLUSTER.xyz
+exec rm cluster$i.xyz
+}
+}
+}
+close $file1
+close $file2
+close $file3
+close $file4
+#-----------Printing OUTPUT files
+puts " \n\n OUTPUT files :\n---------------\n"
+puts " \n CLUSTER-A.xyz\n CLUSTER-B.xyz\n CLUSTER-C.xyz \n UNCLUSTER.xyz \n"
+
+#
+puts "\n\n\n \t  \t $********** ANJI BABU KAPAKAYALA **********$\n\n\n"
+}
+
 #=========================MY COMMAND LIST============================
 proc my_commands {show} {
   if {"show" == $show } {
 puts "\n  COMMANDS   :\n=============== \n"
 puts "  --help"
 puts "  align "
-puts "  rmsd"
-puts "  distance"
 puts "  angle"
-puts "  dihedral"
+puts "  clustering"
 puts "  contact_map"
 puts "  count_waters"
 puts "  count_hbonds"
-puts "  HB_occupancy"
-puts "  show_hbonds"
-puts "  show_residues"
-puts "  show_interactions"
 puts "  details"
+puts "  dihedral"
+puts "  distance"
+puts "  HB_occupancy"
 puts "  pbc_box"
-puts "  save_pdb  "
+puts "  rmsd"
+puts "  save_coordinates"
 puts "  save_image "
 puts "  save_movie"
-puts "  save_coordinates"
+puts "  save_pdb  "
+puts "  sasa"
+puts "  show_hbonds"
+puts "  show_interactions"
+puts "  show_residues"
 puts "  \nFuture updates :\n=============\n "
 puts "  wrap_pbc"
 puts "  ramachandran_plot "
 puts "  HB_plot     "
 puts "  save_vmd  "
 puts "  delete_frame"
+puts "  Radial Pair Distribution Function g(r) "
+puts "  Histogram for given set of data"
 puts " \n\n To Know details of command check :  --help command \n"
 puts "\n\n $********** ANJI BABU KAPKAYALA **********$  \n\n"
 }
@@ -1270,12 +1534,12 @@ puts " PUPOSE    : Aligns molecules corresponding to given  molid1 & molid2 \n\n
 puts " USAGE     : align molid1 molid2 \n\n"
 puts " example   : align 0 1 "
 } elseif { "rmsd" == $command } {
-puts " PURPOSE  : Measures Avg.RMSD & std for given selections and molecules  \n\n"
-puts " USAGE    : rmsd {Atomselction} {molid1} {molid2} \n\n"
-puts " EXAMPLE  : rmsd 'backbone' 0 1 "
-puts " EXAMPLE  : rmsd 'protein' top top\n"
-puts " OUTPUT   : Data will be stored in RMSD.dat file\n"
-puts " IF both the molids are same , RMSD will be calculated by taking zeroth frame as reference "
+puts " PURPOSE  : Measures Avg.RMSD & std for given selection and molecules \n\n"
+puts " USAGE    : rmsd {Atomselection} {molid1} {molid2} \n\n"
+puts " EXAMPLE1 : rmsd 'backbone' 0  1 \n"
+puts " EXAMPLE2 : rmsd 'protein' top top \n"
+puts " OUTPUT   : Data will be stored in RMSD.dat file\n\n"
+puts " IF both the molids are same , RMSD will be calculated by taking zeroth frame as reference \n"
 } elseif { "angle" == $command } {
 puts "  PURPOSE  : Measures Avg. angle & std  for any given 3 atoms \n\n"
 puts "  USAGE    : angle sel1 sel2 sel3 \n\n"
@@ -1361,12 +1625,12 @@ puts "       END_FRAME       : End Frame Number\n"
 #
 } elseif {"save_pdb" == $command} {
 puts "\n   PURPOSE : Writes pdb file for given options \n\n"
-puts "   USAGE    : save_pdb atomselection start_frame end_frame stride molid filename\n\n"
+puts "   USAGE    : save_pdb {atomselection} {start_frame} {end_frame stride} {molid} {filename}\n\n"
 puts "   EXAMPLE  : save_pdb 'protein' 5 100 5 top file.pdb \n"
 puts "   Above example , It will write file.pdb for 'protein' from frame 5 to 100 by skipping every 5 frames. \n\n\n"
 } elseif {"save_coordinates" ==  $command} {
 puts "\n   PURPOSE : Saves coordinates for given arguments \n\n"
-puts "   USAGE    : save_pdb atomselection start_frame end_frame stride molid filename\n\n"
+ puts "   USAGE    : save_coordinates {atomselection} {molid}  {filename} {filetype}{start_frame} {end_frame stride} \n\n"
  puts "   Atomselection  : Any slection"
  puts "   Start frame    : From which frame to save coordinates"
  puts "   End frame      : To which frame to save coordinates"
@@ -1376,18 +1640,21 @@ puts "   USAGE    : save_pdb atomselection start_frame end_frame stride molid fi
  puts "   Filetype       : Which format you want to save. \n\n\n"
  puts "   Filetypes Available  : ABINIT , bgf, binpos, crd, crdbox, dcd, gro, trr, js, lammpstrj, mol2,"
  puts "                          namdbin, pdb, pqr, rst7,POSCAR, xbgf, xyz, dtr, mae, dms, hoomd \n\n"
-#--------------------#
-#puts "   EXAMPLE  : save_pdb 'protein' 5 100 5 top file.pdb \n"
-#puts "   Above example , It will write file.pdb for 'protein' from frame 5 to 100 by skipping every 5 frames. \n\n\n"
+ puts "   EXAMPLES       : \n\n"
+ puts "   EXAMPLE1  : save_coordinates 'protein'  top file.mol2 mol2 5 100 5"
+ puts "   EXAMPLE2  : save_coordinates 'protein'  top file.gro gro 5 100 5\n\n\n"
+ puts "   In example1 , writes filename.mol2 for 'protein' from frame 5 to 100 by skipping every 5 frames."
+ puts "   In example2 , writes filename.gro for 'protein' from frame 5 to 100 by skipping every 5 frames."
+#
 } elseif {"save_image" == $command } {
 puts "    PURPOSE    : Rendering image of currently active frame of given molid.\n\n"
 puts "    UASAGE     : save_image molid filename \n\n"
 puts "    EXAMPLE    : save_image top my_image \n"
-puts "     ( extension of file not required ) \n"
-puts "    OUTPUT     : Generates three files."
-puts "               : filename.dat"
-puts "               : filename.dat.tga"
-puts "               : filename.dat.jpg\n"
+puts "     ( extension of file not required ) \n\n"
+puts "    OUTPUT     : Generates three files." 
+puts "                : filename.dat"
+puts "                : filename.dat.tga"
+puts "                : filename.dat.jpg\n"
 } elseif {"save_movie" == $command} {
 puts "\n   PURPOSE  : RENDER MOVIE IN  GIF FORMAT FOR GIVEN MOLID \n\n"
 puts "   USAGE    : save_movie molid filename inf nf"
@@ -1399,7 +1666,37 @@ puts "   OUTPUT   : Genarates filename.gif file \n\n"
 puts "   (In above example it genarates my_protein.gif file from frame 0 to end frame)\n\n"
 puts "   (In above example 2 it genarates drug_protein.gif file from frame 5 to 20th  frame)\n\n"
 #
-}  else  { puts " Command  Not Found " }
+} elseif {"sasa" == $command} {
+puts "\n TCL script Measuring Solvent Accessible Surface Area (SASA) \n"
+puts " USAGE   : sasa 'SELCTION'\n"
+puts " EXAMPLE : sasa 'resid 170 to 180' \n"
+puts " OUTPUT  : SASA.dat \n"
+#
+} elseif {"clustering" == $command} {
+puts "\n PURPOSE   : To do cluster analysis \n\n"
+puts " USAGE     : clustering {Atomselection} {rmsd_cutoff} {step size} {frame_args} \n\n"
+puts "  Arguments : \n============\n"
+puts "  Atomselect  :  Any atom selection "
+puts "  rmsd_cutoff : RMSD cutoff "
+puts "  Step_size   :   STEP SIZE ( nothing but skip)"
+puts "  frame_args  : Initial & final frame numbers \n\n"
+puts " Default Arguments : \n"
+puts " Dist_func : Distance Function is set to rmsd as default."
+puts " num       : No. of Clusters are fixed to default vaule 3\n\n"
+puts " EXAMPLES  :\n==============\n "
+puts " EXAMPLE1  : clustering '(protein) and backbone' 1.0 2 "
+puts " EXAMPLE2  : clustering '(protein) and backbone' 1.0 2 5"
+puts " EXAMPLE3  : clustering '(protein) and backbone' 1.0 2 5 25\n\n"
+puts " Example1, measures the clusters of given selections with rmsd cutoff 1.0 and "
+puts "           step size 2 for zeroth frame to final frame in trajectory.\n"
+puts " Example2, measures the clusters of given selections with rmsd cutoff 1.0 and "
+puts "           step size 2 from frame 5 to final frame in trajectory.\n"
+puts " Example3, measures the clusters of given selections with rmsd cutoff 1.0 and "
+puts "           step size 2 from frame 5 to frame 25 in trajectory.\n"
+puts "  (At present No. of clusters are fixed to 3) "
+puts "  Default  Distance function is rmsd. but you can change to fitrmsd or rgyd or rmsd"
+#
+} else  { puts " Command  Not Found " }
 puts "\n\n \n    $************* ANJI BABU KAPAKAYALA *************$\n\n"
 }
 #
