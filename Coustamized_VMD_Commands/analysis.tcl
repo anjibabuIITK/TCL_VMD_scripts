@@ -16,6 +16,7 @@
 #  Measure  Angle
 #  Measure Dihedral
 #  Contact map
+#  clustering analysis
 #  Print  Interactions within given cutoff
 #  Print No. of watrs within given cutoff
 #  Print No. of HBonds within given cutoff
