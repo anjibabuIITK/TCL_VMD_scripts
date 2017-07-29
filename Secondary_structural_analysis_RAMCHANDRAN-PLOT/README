@@ -1,1 +1,114 @@
+#TCL VMD Script to analyse secondary structure of given protein.
+ Based on ramachandran plot. PSI v/s PHI
+
+Authour   : ANJI BABU KAPAKAYALA
+           : IIT KANPUR, INDIA.
+           : ( anjibabu480@gmail.com)
+
+ PURPOSE   : This script will print Amount of ALPHA HELIX and BEETA SHEETS percentages
+             for given Atom selection and frame intervals of loaded trajectory.
+ USAGE     : rama_analysis {ATOMSELECTION} {FRAME ARGUMENTS}
+ ARGUMENTS : 
+Atom Selection  : For any given Atomselection 
+ Frame Arguments : Starting & End frame numbers (optional)
+
+ EXAMPLE 1 : rama_analysis "backbone" 
+ EXAMPLE 2 : rama_analysis "protein" 5
+ EXAMPLE 3 : rama_analysis "alpha_helix" 5 25
+ EXAMPLE 4 : rama_analysis "beetasheet" 50
+
+ EXAMPLE1 , Prints the secondary srtucture information of backbone from zeroth frame to end frame
+            available in trajectory
+
+ EXAMPLE2, Prints the secondary srtucture information of protein from 5th frame to end frame
+ EXAMPLE3, Prints the secondary srtucture information of selction alpha helix from 5th frame to 25th frame.
+
+ EXAMPLE4, Prints the secondary srtucture information of selction betaa sheet from 50th frame to end frame.
+
+ OUTPUT      : Stores PHI and PSI values in file PSIPHI.dat.
+             : Stores Alpha helix percentage fluctuations with time in A_HELIX-fluctuation.dat.
+             : Stores Beta Sheet  percentage fluctuations with time in B_Sheet-fluctuation.dat.
+
+ PLotting    : gnuplot plot.gnp 
+             : gnuplot A_helix.gnp
+             : gnuplot B_sheet.gnp
+ OUTPUT_PLOT : rama_plot.eps ( Ramachandran plot)
+             : A_helix.eps & B_sheet.eps
+
+OUTPUT EXAMPLE : on tk console
+===============================================================
+ 
+Total frames found : 99 
+
+ Given Input :
+ ============
+
+  Atom selection : backbone 
+  Starting Frame : 0 
+  End Frame      : 99 
+
+ 
+ Analysis will be performed on 100 frame(s) (0 to 99)
+ 
+
+
+ Secondary Structure Analysis : 
+
+
+ Avg. Alpha Helix  :   21.18 % 
+ 
+ Avg. Beta Strands :   16.34 % 
+
+
+ 
+ OUTPUTS : Psi v/s Phi data has been stored in PSIPHI.dat
+           Time v/s alpha_helix percentage has stored in A_HELIX-fluctuation.dat 
+           Time v/s betasheet percentage has stored in B_Sheet-fluctuation.dat 
+
+ 
+
+   $************  ANJI BABU KAPAKAYALA  *************$
+#====================================================================
+
+PLOTTING : sh plotting.sh
+ It generates thress eps pictures.
+ 
+ 
+ 
+ #=============================================================#
+ #                                                             #
+ #                        ANJIBABU KAPAKAYALA                  #
+ #                INDIAN INSTITUTE OF TECHNOLOGY, KANPUR.      #
+ #                   INDIA. (anjibabu480@gmail.com)            #
+ #                                                             #
+ #=============================================================#
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+
+
+
+
+
+
+>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
