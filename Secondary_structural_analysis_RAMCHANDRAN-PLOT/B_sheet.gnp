@@ -1,0 +1,17 @@
+set encoding iso_8859_1
+set terminal postscript eps  enhanced color font 'Helvetica,20' linewidth 2
+set output 'B_sheet.eps'
+# set xzeroaxis lt 3 lw 2.5
+# set yzeroaxis lt 3 lw 2.5
+# set xrange [-180:180]
+# set yrange [-180:180]
+#set zeroaxis lw 3
+ set border  lw 2
+ set xlabel "Frame"
+ set ylabel "Beta Sheet (%)"
+ set grid
+ set title "BETA STRANDS FLUCTUATIONS"
+plot "B_Sheet-fluctuation.dat" u 1:2 w p notitle
+
+ 
+ 
