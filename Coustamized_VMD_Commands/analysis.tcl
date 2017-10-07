@@ -67,10 +67,10 @@
 #
 #IF both the molids are same , RMSD will be calculated by taking zeroth frame as reference
 #
-# Distance : Measures Avg Distance & std  for any given 2 atoms
+# Distance : Measures Avg Distance & std and distribution for any given 2 atoms
 # USAGE    : distance sel1 sel2
 # example  : distance "serial 3418" "serial 3415"
-# OUTPUT   : DISTANCE.dat
+# OUTPUT   : DISTANCE.dat & HISTOGRAM.dat
 #
 # Angle    : Measures Avg. angle & std  for any given 3 atoms
 # USAGE    : angle sel1 sel2 sel3
@@ -291,6 +291,8 @@ puts "Done."
 #=============Calculating Distance====================================
 proc distance { sel1 sel2 } {
 set outfile [open DISTANCE.dat w ]
+set hist_file [open HISTOGRAM.dat w]
+set nbin 101
 set n [molinfo top get numframes]
 #--------writing given inputs--------------
 puts $outfile "\nGIVEN INPUT DATA :\n====================\n\n"
@@ -310,6 +312,7 @@ set sum 0
 #       puts "Atom2 Positions : $atom2_posi \n"
        $atom2 delete
        set dist [ vecdist $atom1_posi $atom2_posi ]
+       set distribution($i.r) $dist
        puts $outfile [format " %5d    %7.2f" $i  $dist]
 #       puts  "Frame : $i\t Distance : $dist "
       set sum [expr $sum + $dist]
@@ -333,11 +336,31 @@ set sum 0
 set std [expr sqrt ($sum/($n-1))]
 #puts " Standard Deviation : $std "
 #------------------------------------------------#
+#HISTOGRAM
+set d_min distance(0.r)
+set d_max distance(0.r)
+for {set i 0} {$i < $n} {incr i} {
+if {$distance($i.r) < $d_min} {set d_min $distance($i.r)}
+if {$distance($i.r) > $d_min} {set d_max $distance($i.r)}
+}
+set width [expr ($d_max - $d_min) / ($nbin -1)]
+for {set k 0} {$k < $nbin} {incr k} {
+set distribution($k) 0
+}
+for {set i 0} {$i < $n} {incr i} {
+set k [expr int(($distance($i.r) - $d_min) / $width)]
+incr distribution($k)
+}
+for {set k 0} {$k < $nbin} {incr k} {
+puts $hist_file "[expr $d_min + $k * $width] $distribution($k)"
+}
+close  $hist_file
+#--------------------------------------------------#
    puts $outfile [ format "\n\nAvg. Distance       : %7.2f\n\n"  $Avg_dist ]
    puts $outfile [ format " Standard Deviation  : %7.2f\n\n"  $std ]
    puts  [ format "\n Avg. Distance       : %7.2f (A)\n"  $Avg_dist ]
    puts  [ format " Standard Deviation  : %7.2f\n\n"  $std ]
-   puts  " Note : Data has been stored in DISTANCE.dat file\n\n"
+   puts  " Note : Data has been stored in files DISTANCE.dat & HISTOGRAM.dat\n\n"
    puts " #=================================================#"
    puts " #  Written By ANJI BABU KAPAKAYALA                #"
    puts " #=================================================#"
@@ -1526,10 +1549,10 @@ proc --help {command} {
 puts " \n\n COMMAND NAME : $command\n========================\n\n"
 #set d distance
   if { "distance" == $command}  {
-puts " PUSPOSE  : Measures Avg Distance & std  for any given 2 atoms \n\n"
+puts " PUSPOSE  : Measures Avg Distance & std and Distribution for any given 2 atoms \n\n"
 puts " USAGE    : distance sel1 sel2 \n\n"
 puts " example  : distance 'serial 3418' 'serial 3415' \n"
-puts " OUTPUT   : Stores data in DISTANCE.dat file"
+puts " OUTPUT   : Stores data in files DISTANCE.dat & HISTOGRAM.dat"
 } elseif { "align" == $command}  {
 puts " PUPOSE    : Aligns molecules corresponding to given  molid1 & molid2 \n\n"
 puts " USAGE     : align molid1 molid2 \n\n"
