@@ -103,10 +103,10 @@ AVAILABLE COMMANDS AND DETAILS :
 
 
 6. Command Name  : distance
-   PURPOSE       : Measures Avg Distance & std  for any given 2 atoms
+   PURPOSE       : Measures Avg Distance & std  and Distribution for any given 2 atoms
    USAGE         : distance sel1 sel2
    EXAMPLE       : distance "serial 3418" "serial 3415"
-   OUTPUT        : Generates data into a file "DISTANCE.dat"
+   OUTPUT        : Generates data into a file "DISTANCE.dat and Distribution of data stores into HISTOGRAM.dat" 
 
 
 7. Command Name  : angle
