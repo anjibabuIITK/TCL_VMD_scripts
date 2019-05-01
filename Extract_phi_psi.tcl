@@ -1,12 +1,17 @@
 # VMD TCL script to print Frame number and Phi Psi values
 #
 #  Authour:  ANJI BABU KAPAKAYALA
+#	     C/O Prof. Nisanth N. Nair
 #	   IIT KAnpur, India
 #
 #  USAGE: source Extract_phi_psi.tcl    (in tk console of vmd)
 #
 #	OUTPUT FILES: Q.dat, C5-C5.dat, CL-CL.dat
 #			Minima_Q.pdb, Minima_C5-C5.pdb, Minima_CL-CL.pdb  
+#
+#	Description: This script is written mainly to extract the structres of desired range of phi1, phi2, psi1, and psi2 values of 
+#	Alanine tripeptide system and store them in corresponding pdb fies.
+#
 #
 # Procedure to remove repeated numbers
 #-------------------------------------------#
