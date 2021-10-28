@@ -27,6 +27,7 @@
 #  save_image
 #  sasa
 #  save_coordinates
+#  bgcolor
 #  --help : which gives details of command
 #  my_commands show : shows avalilable commands
 #
@@ -1530,6 +1531,7 @@ puts "  sasa"
 puts "  show_hbonds"
 puts "  show_interactions"
 puts "  show_residues"
+puts "  bgcolor"
 puts "  \nFuture updates :\n=============\n "
 puts "  wrap_pbc"
 puts "  ramachandran_plot "
@@ -1722,12 +1724,29 @@ puts "  Default  Distance function is rmsd. but you can change to fitrmsd or rgy
 puts " \n OUTPUT Files :\n============\n"
 Puts " Generates 4 output files."
 puts " CLUSTER-A.xyz\n CLUSTER-B.xyz\n CLUSTER-C.xyz\n UNCLUSTER.xyz "
+} elseif {"bgcolor" == $command} {
+puts "\n PURPOSE   : To change Background color of Display\n"
+puts " USAGE     : bgcolor <color> \n\n"
+puts " EXAMPLE    : bgcolor white \n\n"
 
 #
 } else  { puts " Command  Not Found " }
 puts "\n\n \n    $************* ANJI BABU KAPAKAYALA *************$\n\n"
 }
 #
+# Added these procedures o\after Oct 2021
+#===============Change Background color ===========================#
+#
+# bgcolor :
+# UASAGE     : bgcolor <color>
+# EXAMPLE    : bgcolor white
+#
+#
+proc bgcolor { choice } {
+color Display Background $choice
+puts "\n\n Backgroung color changed to $choice\n\n"
+puts "\n\n\n   $**********   ANJI BABU KAPAKAYALA   *********$\n"
+}
 #==================================================================================#
 #                    Written By ANJI BABU KAPAKAYALA                               #
 #==================================================================================#
