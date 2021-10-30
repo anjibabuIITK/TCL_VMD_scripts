@@ -291,14 +291,42 @@ puts "Done."
 }
 #=============Calculating Distance====================================
 proc distance { sel1 sel2 } {
-set outfile [open DISTANCE.dat w ]
-set hist_file [open HISTOGRAM.dat w]
-set nbin 101
+#---------------------------#
+# if {[llength $args] == 2} {
+#   set choice "no"
+#   puts "$choice"
+# }
+#---------------------------#
+set outfile [open DISTANCE.xvg w ]
+set pltfile [open plot.gnp w ]
+#set pltfile1 [open dist.xvg w ]
+#set hist_file [open HISTOGRAM.dat w]
+#set nbin 101
 set n [molinfo top get numframes]
-#--------writing given inputs--------------
-puts $outfile "\nGIVEN INPUT DATA :\n====================\n\n"
-puts $outfile "Sel1 : $sel1 \n Sel2 : $sel2\n\n"
-puts $outfile " No. of Frames found : $n \n\n"
+#-------------------------------------------------#
+# Writing xmgrace file
+
+  puts $outfile "# -------------------------------------------#"
+  puts $outfile "#   <=== Welcome to Easy Console Tool ===>    "
+  puts $outfile "#            ANJI BABU KAPAKAYALA	       "
+  puts $outfile "# -------------------------------------------#"
+  puts $outfile "# This file was created by Easy console tool."
+  puts $outfile "# Plots Distance with Frame."
+  puts $outfile "\n#GIVEN INPUT DATA :\n#====================\n"
+  puts $outfile "#Sel1 : $sel1 \n# Sel2 : $sel2\n"
+  puts $outfile "# No. of Frames found : $n \n"
+  puts $outfile "@ title \"Distance vs Frame.\""
+  puts $outfile "@ xaxis label \"Frame\""
+  puts $outfile "@ yaxis label \"Distance\""
+  puts $outfile "@ TYPE xy"
+  puts $outfile "@ view 0.15, 0.15, 1.00, 0.75"
+  puts $outfile "@ legend on"
+  puts $outfile "@ legend box on"
+  puts $outfile "@ legend loctype view"
+  puts $outfile "@ legend 0.78, 0.8"
+  puts $outfile "@ legend length 2"
+  puts $outfile "@ s0 legend \"Distance\""
+#-------------------------------------------------#
 puts  "\nGIVEN INPUT DATA :\n====================\n"
 puts  " Sel1 : $sel1 \n Sel2 : $sel2\n\n"
 puts  " No. of Frames found : $n \n\n"
@@ -338,34 +366,54 @@ set std [expr sqrt ($sum/($n-1))]
 #puts " Standard Deviation : $std "
 #------------------------------------------------#
 #HISTOGRAM
-set d_min distance(0.r)
-set d_max distance(0.r)
-for {set i 0} {$i < $n} {incr i} {
-if {$distance($i.r) < $d_min} {set d_min $distance($i.r)}
-if {$distance($i.r) > $d_min} {set d_max $distance($i.r)}
-}
-set width [expr ($d_max - $d_min) / ($nbin -1)]
-for {set k 0} {$k < $nbin} {incr k} {
-set distribution($k) 0
-}
-for {set i 0} {$i < $n} {incr i} {
-set k [expr int(($distance($i.r) - $d_min) / $width)]
-incr distribution($k)
-}
-for {set k 0} {$k < $nbin} {incr k} {
-puts $hist_file "[expr $d_min + $k * $width] $distribution($k)"
-}
-close  $hist_file
+#set d_min distance(0.r)
+#set d_max distance(0.r)
+#for {set i 0} {$i < $n} {incr i} {
+#if {$distance($i.r) < $d_min} {set d_min $distance($i.r)}
+#if {$distance($i.r) > $d_min} {set d_max $distance($i.r)}
+#}
+#set width [expr ($d_max - $d_min) / ($nbin -1)]
+#for {set k 0} {$k < $nbin} {incr k} {
+#set distribution($k) 0
+#}
+#for {set i 0} {$i < $n} {incr i} {
+#set k [expr int(($distance($i.r) - $d_min) / $width)]
+#incr distribution($k)
+#}
+#for {set k 0} {$k < $nbin} {incr k} {
+#puts $hist_file "[expr $d_min + $k * $width] $distribution($k)"
+#}
+#close  $hist_file
 #--------------------------------------------------#
-   puts $outfile [ format "\n\nAvg. Distance       : %7.2f\n\n"  $Avg_dist ]
-   puts $outfile [ format " Standard Deviation  : %7.2f\n\n"  $std ]
+#   puts $outfile [ format "\n\nAvg. Distance       : %7.2f\n\n"  $Avg_dist ]
+#   puts $outfile [ format " Standard Deviation  : %7.2f\n\n"  $std ]
+#-------------------------------------------------#
+# Plotting script using gnuplot
+  puts $pltfile "set term png"
+  puts $pltfile "set output 'dist.png'"
+  puts $pltfile "set border lw 2"
+  puts $pltfile "set grid"
+  puts $pltfile "set yl 'Distance'"
+  puts $pltfile "set xl 'Frame'"
+  puts $pltfile "plot 'DISTANCE.xvg' u 1:2 w l lw 2 title'Distance'"
+
+  close $pltfile 
+#-------------------------------------------------#
+
    puts  [ format "\n Avg. Distance       : %7.2f (A)\n"  $Avg_dist ]
    puts  [ format " Standard Deviation  : %7.2f\n\n"  $std ]
-   puts  " Note : Data has been stored in files DISTANCE.dat & HISTOGRAM.dat\n\n"
+   puts  " Note : Data has been stored in files DISTANCE.xvg & plot.png\n\n"
    puts " #=================================================#"
    puts " #  Written By ANJI BABU KAPAKAYALA                #"
    puts " #=================================================#"
    close $outfile
+#if {$choice == "-plot"} {
+exec xmgrace DISTANCE.xvg &
+#} else {
+  exec  gnuplot plot.gnp 
+  exec rm plot.gnp
+# exec "xdg-open dist.png &"
+#}
 }
 #=========================Calculating Avg Angle=========================================
 proc angle {sel1 sel2 sel3 } {
