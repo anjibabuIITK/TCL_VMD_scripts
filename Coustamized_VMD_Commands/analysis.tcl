@@ -290,7 +290,7 @@ close $outfile
 puts "Done."
 }
 #=============Calculating Distance====================================
-proc distance { sel1 sel2 } {
+proc distance { sel1 sel2 args } {
 #---------------------------#
 # if {[llength $args] == 2} {
 #   set choice "no"
@@ -304,6 +304,40 @@ set pltfile [open plot.gnp w ]
 #set nbin 101
 set n [molinfo top get numframes]
 #-------------------------------------------------#
+#----------setting up frames------------------------------------------#
+  if {[llength $args] == 0} {
+    set inf 0
+    set nf $n
+    set plot "false"
+  }
+  if {[llength $args] == 1} {
+    if {[lindex $args 0] == "-show_plot"} {
+    set inf 0
+    set nf $n
+    set plot "true"
+    } else {
+    set inf [lindex $args 0]
+    set nf $n
+    set plot "false"
+    }
+}
+  if {[llength $args] > 1} {
+     set inf [lindex $args 0]
+     if {[lindex $args 1] == "-show_plot"} {
+       set plot "true"
+       set nf $n
+     } else {
+      set nf [lindex $args 1]
+     }
+    if {[lindex $args 2] == "-show_plot"} {
+    set plot "true"
+    } else {
+    set plot "false"
+    puts "Use argument: -show_plot to visulize the graph"
+    }
+}
+  puts "\n\n analysis will be performed on $inf to $nf frame(s) " 
+#-------------------------------------------------------------------------#
 # Writing xmgrace file
 
   puts $outfile "# -------------------------------------------#"
@@ -331,7 +365,7 @@ puts  "\nGIVEN INPUT DATA :\n====================\n"
 puts  " Sel1 : $sel1 \n Sel2 : $sel2\n\n"
 puts  " No. of Frames found : $n \n\n"
 set sum 0
- for  {set i 0}  {$i <= $n}  {incr i}  {
+ for  {set i $inf}  {$i <= $nf}  {incr i}  {
        set atom1 [atomselect top $sel1 frame $i ]
        set atom1_posi [ lindex [ $atom1 get "x y z"] 0 ]
 #       puts "Atom1 Positions : $atom1_posi\n"
@@ -347,10 +381,10 @@ set sum 0
       set sum [expr $sum + $dist]
     }
 #--------Averaging
-   set Avg_dist [expr $sum/$n]
+   set Avg_dist [expr $sum/$nf]
 #--------Standard Deviation
 set sum 0
- for  {set i 0}  {$i <= $n}  {incr i}  {
+ for  {set i $inf}  {$i <= $nf}  {incr i}  {
        set atom1 [atomselect top $sel1 frame $i ]
        set atom1_posi [ lindex [ $atom1 get "x y z"] 0 ]
        $atom1 delete
@@ -362,7 +396,7 @@ set sum 0
     set sum [expr $sum + $Numarator ]
 # sum = sum of (x-x_avg)**2
 }
-set std [expr sqrt ($sum/($n-1))]
+set std [expr sqrt ($sum/($nf-1))]
 #puts " Standard Deviation : $std "
 #------------------------------------------------#
 #HISTOGRAM
@@ -395,7 +429,9 @@ set std [expr sqrt ($sum/($n-1))]
   puts $pltfile "set grid"
   puts $pltfile "set yl 'Distance'"
   puts $pltfile "set xl 'Frame'"
-  puts $pltfile "plot 'DISTANCE.xvg' u 1:2 w l lw 2 title'Distance'"
+  puts $pltfile "set xr \[$inf:$nf\]"
+# puts $pltfile "set ytics 0,2"
+  puts $pltfile "plot 'DISTANCE.xvg' u 1:2 w l lw 2 lc'black' title'Distance'"
 
   close $pltfile 
 #-------------------------------------------------#
@@ -407,13 +443,14 @@ set std [expr sqrt ($sum/($n-1))]
    puts " #  Written By ANJI BABU KAPAKAYALA                #"
    puts " #=================================================#"
    close $outfile
-#if {$choice == "-plot"} {
+#--->
+if {$plot == "true"} {
 exec xmgrace DISTANCE.xvg &
-#} else {
+}
+#
   exec  gnuplot plot.gnp 
   exec rm plot.gnp
 # exec "xdg-open dist.png &"
-#}
 }
 #=========================Calculating Avg Angle=========================================
 proc angle {sel1 sel2 sel3 } {
@@ -1206,17 +1243,18 @@ puts  "\n\n\n\n\n             $***************     ANJI BABU KAPAKAYALA     ****
 #Render Image by using Tachyon  
 #
 # save_image :
-# UASAGE     : save_image molid filename
-# EXAMPLE    : save_image top my_image
+# UASAGE     : save_image filename
+# EXAMPLE    : save_image my_image
 # ( extension of file not required )
+# 
 #
-#
-proc save_image { molid filname } {
+proc save_image { filname } {
+set molid top
 set imagename  "$filname.dat"
 set name [molinfo $molid get name]
 set current_frame [molinfo $molid get frame]
 set oldbg [colorinfo category  Display Background ]
-color Display Background white
+#color Display Background white
 #mol modmaterial 1 0 AOShiny
 #mol modmaterial 2 0 AOChalky
 #mol modcolor 2 0 name
@@ -1224,13 +1262,13 @@ color Display Background white
 puts "\n\n rendering : $name\n\n"
 render Tachyon $imagename  tachyon -aasamples 4 -trans_vmd -mediumshade %s  format TARGA -o %s.tga
 #exec convert $imagename.tga $imagename.ps
-exec convert $imagename.tga $imagename.jpg
+exec convert $imagename.tga $filname.jpg
 puts " \n Rendering completed."
 puts " \n\n Image files :\n ------------\n "
 puts "  $imagename"
 puts "  $imagename.tga"
-puts "  $imagename.jpg"
-color Display Background $oldbg
+puts "  $filname.jpg"
+#color Display Background $oldbg
 puts "\n\n\n   $**********   ANJI BABU KAPAKAYALA   *********$\n"
 }
 #===============RENDER MOVIE ================================#
@@ -1721,14 +1759,14 @@ puts "\n   PURPOSE : Saves coordinates for given arguments \n\n"
  puts "   In example2 , writes filename.gro for 'protein' from frame 5 to 100 by skipping every 5 frames."
 #
 } elseif {"save_image" == $command } {
-puts "    PURPOSE    : Rendering image of currently active frame of given molid.\n\n"
-puts "    UASAGE     : save_image molid filename \n\n"
-puts "    EXAMPLE    : save_image top my_image \n"
+puts "    PURPOSE    : Rendering image of currently active frame of molid 0 or top.\n\n"
+puts "    UASAGE     : save_image filename \n\n"
+puts "    EXAMPLE    : save_image my_image \n"
 puts "     ( extension of file not required ) \n\n"
 puts "    OUTPUT     : Generates three files." 
 puts "                : filename.dat"
 puts "                : filename.dat.tga"
-puts "                : filename.dat.jpg\n"
+puts "                : filename.jpg\n"
 } elseif {"save_movie" == $command} {
 puts "\n   PURPOSE  : RENDER MOVIE IN  GIF FORMAT FOR GIVEN MOLID \n\n"
 puts "   USAGE    : save_movie molid filename inf nf"
