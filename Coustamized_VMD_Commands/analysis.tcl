@@ -68,10 +68,13 @@
 #
 #IF both the molids are same , RMSD will be calculated by taking zeroth frame as reference
 #
-# Distance : Measures Avg Distance & std and distribution for any given 2 atoms
-# USAGE    : distance sel1 sel2
-# example  : distance "serial 3418" "serial 3415"
-# OUTPUT   : DISTANCE.dat & HISTOGRAM.dat
+# Distance : Measures Distance, Avg Distance & std for any given 2 atoms
+# USAGE    : distance sel1 sel2 <initial-frame> <end-frame> <-show_plot>
+# example  : distance "serial 3418" "serial 3415" 
+# example  : distance "serial 3418" "serial 3415" 100 2000
+# example  : distance "serial 3418" "serial 3415" -show_plot
+# example  : distance "serial 3418" "serial 3415" 10 1000 -show_plot
+# OUTPUT   : DISTANCE.xvg and dist.png
 #
 # Angle    : Measures Avg. angle & std  for any given 3 atoms
 # USAGE    : angle sel1 sel2 sel3
@@ -774,7 +777,12 @@ puts " #================================================#"
 
 }
 #================================MOLECULE DETAILS===================
-proc details {molid} {
+proc details { sel } {
+   set molid 0
+
+#----------setting up frames------------------------------------------#
+  if {$sel == "system"} {
+#
  set n [molinfo $molid get numframes]
  set name [molinfo $molid get name]
  set natoms [molinfo $molid get numatoms]
@@ -808,6 +816,23 @@ puts "               : $box1 "
 puts "\n\n #================================================#"
 puts " #     Written By ANJI BABU KAPAKAYALA            #"
 puts " #================================================#"
+#
+} else {
+#   set sel [lindex $args 1]
+puts "\n Details : \n====================\n\n"
+puts "index name resid resname"
+puts "====================\n\n"
+   set selA [atomselect $molid "$sel" ]
+   set list1 [ $selA get { index  name resid  resname } ]
+#  
+   set unique [lsort -unique $list1 ]
+   foreach resid_resname $unique {
+   puts "   $resid_resname "
+   }
+puts "\n\n #================================================#"
+puts " #     Written By ANJI BABU KAPAKAYALA             #"
+puts " #================================================#"
+}
 }
 #======================SHOW NO OF WATERS WITHIN GIVEN SELECTION================
 proc count_waters {sel molid inf nf } {
@@ -1637,10 +1662,14 @@ proc --help {command} {
 puts " \n\n COMMAND NAME : $command\n========================\n\n"
 #set d distance
   if { "distance" == $command}  {
-puts " PUSPOSE  : Measures Avg Distance & std and Distribution for any given 2 atoms \n\n"
-puts " USAGE    : distance sel1 sel2 \n\n"
-puts " example  : distance 'serial 3418' 'serial 3415' \n"
-puts " OUTPUT   : Stores data in files DISTANCE.dat & HISTOGRAM.dat"
+puts " PURPOSE : Measures Distance, Avg Distance & std for any given 2 atoms\n"
+puts " USAGE    : distance sel1 sel2 <initial-frame> <end-frame> <-show_plot>\n\n"
+puts " Example  : distance \"serial 3418\" \"serial 3415\""
+puts " Example  : distance \"serial 3418\" \"serial 3415\" 100 2000"
+puts " Example  : distance \"serial 3418\" \"serial 3415\" -show_plot"
+puts " Example  : distance \"serial 3418\" \"serial 3415\" 10 1000 -show_plot\n"
+puts " OUTPUT   : Stores data in DISTANCE.xvg and dist.png files."
+
 } elseif { "align" == $command}  {
 puts " PUPOSE    : Aligns molecules corresponding to given  molid1 & molid2 \n\n"
 puts " USAGE     : align molid1 molid2 \n\n"
@@ -1675,9 +1704,11 @@ puts " example 2 : show_residues '(not resname WAT) and within 3 of resid 235' 0
 puts " example 3 : show_residuese 'protein and hydrophobic ' top  \n\n"
 puts " OUTPUT   : Data will be stored in RESNAMES.dat file\n\n"
 } elseif { "details" == $command } {
-puts " PURPOSE  : Prints required molecular details for given molid \n\n"
-puts " USAGE    : details molid \n\n"
-puts " example  : details 0 "
+puts " PURPOSE  : Prints required details for given selection \n\n"
+puts " USAGE    : details <system/selection> \n\n"
+puts " Example  : details system "
+puts " Example  : details \"resid 170\""
+puts " Example  : details \"resid 170 to 180\""
 } elseif { "count_waters" == $command } {
 puts " PURPOSE  : Prints Avg. No of waters present around given selection \n\n"
 puts " USAGE    : count_waters sel molid start_frame end_frame \n\n"
