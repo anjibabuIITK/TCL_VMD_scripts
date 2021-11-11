@@ -1100,13 +1100,33 @@ close $outfile
 #==================================================================
 #TCL VMD SCRIPT TO GET HBONDING OCCUPANCY (%)
 #
-# USAGE   : HB_occupancy sel1 sel2 distance_cutoff angle_cutoff start_frame end_frame
+# USAGE   : HB_occupancy "sel1" "sel2" start_frame end_frame
 #
-# EXAMPLE : HB_occupancy "protein" "resid 235" 3.0 30 0 20
+# EXAMPLE : HB_occupancy "protein" "resid 235"
+# EXAMPLE : HB_occupancy "protein" "resid 235" 200
+# EXAMPLE : HB_occupancy "protein" "resid 235" 200 400
 #
 #
-proc HB_occupancy { sel1 sel2 cutoff angle inf nf } {
-#---------------------------------------------#
+proc HB_occupancy { sel1 sel2 args } {
+set n [ molinfo top get numframes]
+# Distance cutoff and angle cutoff are fixed.    
+    set cutoff 3.0
+    set angle 30.0
+#----------setting up frames------------------------------------------#
+  if {[llength $args] == 0} {
+    set inf 0
+    set nf $n
+  }
+  if {[llength $args] == 1} {
+    set inf [lindex $args 0]
+    set nf $n
+    }
+  if {[llength $args] > 1} {
+     set inf [lindex $args 0]
+     set nf [lindex $args 1]
+    }
+  puts "\n\n analysis will be performed on $inf to $nf frame(s) " 
+#-------------------------------------------------------------------------#
 # Printing given input data
 puts " \n Given Input   : \n==================\n"
 puts "  Atomselection 1 : $sel1 "
@@ -1135,7 +1155,7 @@ puts "  End Frame       : $nf\n\n"
   set B [atomselect top $sel2]
 #---------------------------------------------#
   # output file for printing out all contacts
-  set outfile [open "HBONDS_DATA" w]
+  set outfile [open "HBONDS.dat" w]
  #--------------------------------------------#
   # cycle over the trajectory
   for {set i $inf} {$i <= $nf} {incr i} {
@@ -1755,16 +1775,18 @@ puts "   EXAMPLE   : show_hbonds 'protein and name N' 'protein and name O' 3.0 3
 puts "    OUTPUT   : data will be store in HBONDS.dat.\n"
 #
 } elseif {"HB_occupancy" == $command} {
-puts "\n PURPOSE :  Prints the HBONDS occupancy for given selctions for selected frames. \n\n"
-puts "  USAGE    : HB_occupancy sel1 sel2 distance_cutoff angle_cutoff start_frame end_frame\n\n"
-puts "  EXAMPLE  : HB_occupancy 'protein' 'resid 235' 3.0 30 0 20\n\n\n"
+puts "\n PURPOSE :  Measures the HBONDS occupancy for given donor and acceptor selctions for selected frames. \n\n"
+puts "  USAGE    : HB_occupancy \"sel1\" \"sel2\" <start_frame> <end_frame>\n\n"
+puts "  EXAMPLE  : HB_occupancy \"protein\" \"resid 235\" 0 20\n"
+puts "  EXAMPLE  : HB_occupancy \"protein\" \"resid 235\" \n"
+puts "  EXAMPLE  : HB_occupancy \"protein\" \"resid 235\" 200\n"
 puts "  ARGUMENTS     : \n===============\n"
 puts "       SELECTION1      : ANY DONOR SELECTION "
 puts "       SELECTION2      : ANY ACCEPTOR SELECTION"
-puts "       DISTANCE_CUTOFF : Distance cutoff to measure HBonds"
-puts "       ANGLEE_CUTOFF   : Angle cutoff to measure HBonds"
-puts "       START_FRAME     : Starting Frame Number"
-puts "       END_FRAME       : End Frame Number\n"
+puts "       DISTANCE_CUTOFF : Distance cutoff to measure HBonds, 3.00 Ang is fixed"
+puts "       ANGLEE_CUTOFF   : Angle cutoff to measure HBonds, 30.0 degree is fixed"
+puts "       START_FRAME     : Starting Frame Number (optional)"
+puts "       END_FRAME       : End Frame Number (optional)\n"
 #
 } elseif {"save_pdb" == $command} {
 puts "\n   PURPOSE : Writes pdb file for given options \n\n"
