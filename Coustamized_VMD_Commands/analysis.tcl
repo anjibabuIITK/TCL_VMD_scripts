@@ -1638,8 +1638,7 @@ puts "\n\n\n \t  \t $********** ANJI BABU KAPAKAYALA **********$\n\n\n"
 }
 
 #=========================MY COMMAND LIST============================
-proc my_commands {show} {
-  if {"show" == $show } {
+proc my_commands {} {
 puts "\n  COMMANDS   :\n=============== \n"
 puts "  --help"
 puts "  align "
@@ -1673,15 +1672,16 @@ puts "  Radial Pair Distribution Function g(r) "
 puts "  Histogram for given set of data"
 puts " \n\n To Know details of command check :  --help command \n"
 puts "\n\n $********** ANJI BABU KAPKAYALA **********$  \n\n"
-}
 #
 }
 #
 #========================================HELP COMMAND=========================
 proc --help {command} {
 puts " \n\n COMMAND NAME : $command\n========================\n\n"
+  if { "my_commands" == $command}  {
+puts " Prints the available commands from Easy Console Tool\n written by Anji Babu Kapakayala.\n"
+} elseif { "distance" == $command}  {
 #set d distance
-  if { "distance" == $command}  {
 puts " PURPOSE : Measures Distance, Avg Distance & std for any given 2 atoms\n"
 puts " USAGE    : distance sel1 sel2 <initial-frame> <end-frame> <-show_plot>\n\n"
 puts " Example  : distance \"serial 3418\" \"serial 3415\""
